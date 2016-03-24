@@ -58,7 +58,7 @@ var App = React.createClass({
           <Navigator
             style={styles.container}
             initialRoute={{name: 'Home', index: 0}}
-            renderScene={(route, navigator) => (<UserList/>)}
+            renderScene={(route, navigator) => this.renderScene(route, navigator)}
             navigationBar={
                     <Navigator.NavigationBar
                       routeMapper={NavigationBarRouteMapper}
