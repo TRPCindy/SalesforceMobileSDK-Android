@@ -34,22 +34,48 @@ var {
     View,
     ListView,
     PixelRatio,
-    Navigator
+    Navigator,
+    TouchableOpacity,
+    Component
 } = React;
+
+var oauth = require('./react.force.oauth');
 var forceClient = require('./react.force.net.js');
 
+var onLogout = function() {
+    oauth.logout();
+}
+
 var App = React.createClass({
+    renderScene: function(route, navigator) {
+        if (route.name === 'Home') {
+          return (<UserList/>);
+        }
+    },
+
     render: function() {
-        return (<Navigator
-                  style={styles.container}
-                  initialRoute={{name: 'Mobile SDK Sample App', index: 0}}
-                  renderScene={(route, navigator) => (<UserList/>)}
-                  navigationBar={
-                          <Navigator.NavigationBar
-                            routeMapper={NavigationBarRouteMapper}
-                          />
-                  }
-                />);
+        return (
+          <Navigator
+            style={styles.container}
+            initialRoute={{name: 'Home', index: 0}}
+            renderScene={(route, navigator) => (<UserList/>)}
+            navigationBar={
+                    <Navigator.NavigationBar
+                      routeMapper={NavigationBarRouteMapper}
+                      style={styles.navBar} />
+            }
+          />);
+    }
+});
+
+// Nav bar components
+var NavButton = React.createClass({
+    render: function() {
+        return (<View style={styles.navBarElt}>
+                  <TouchableOpacity onPress={() => this.props.onPress()}>
+                    <Text style={styles.navBarText}>{this.props.title}</Text>
+                  </TouchableOpacity>
+                </View>);
     }
 });
 
@@ -60,7 +86,12 @@ var NavigationBarRouteMapper = {
   },
 
   RightButton: function(route, navigator, index, navState) {
-      return null;
+      if (route.name === 'Home') {
+          return (
+            <View style={styles.navButtonsGroup}>
+              <NavButton title="Logout" onPress={() => onLogout()} />
+            </View>);
+      }
   },
 
   Title: function(route, navigator, index, navState) {
@@ -85,7 +116,7 @@ var UserList = React.createClass({
     
     componentDidMount: function() {
         var that = this;
-        var soql = 'SELECT Id, Name FROM User LIMIT 10';
+        var soql = 'SELECT Id, Name FROM Contact LIMIT 10';
         forceClient.query(soql,
                           function(response) {
                               var users = response.records;
@@ -139,6 +170,17 @@ var styles = StyleSheet.create({
     navBarText: {
         fontSize: 18,
     },
+    navButtonsGroup: {
+        flex: 1,
+        alignItems:'center',
+        flexDirection: 'row',
+    },
+    navBarElt: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems:'center',
+        margin: 2,
+    },
     scene: {
         flex: 1,
         paddingTop: 50,
@@ -160,4 +202,3 @@ var styles = StyleSheet.create({
 
 
 AppRegistry.registerComponent('ReactNativeTemplateApp', () => App);
-
