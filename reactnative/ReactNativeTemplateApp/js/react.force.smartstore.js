@@ -290,4 +290,3 @@ module.exports = {
     SoupIndexSpec: SoupIndexSpec,
     StoreCursor: StoreCursor
 };
-
