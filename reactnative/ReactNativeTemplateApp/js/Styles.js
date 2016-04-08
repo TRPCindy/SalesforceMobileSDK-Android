@@ -63,16 +63,17 @@ var Styles = StyleSheet.create({
         paddingBottom: 12
   },
   menuTitle: {
-    height: 70,
+    height: 90,
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#246dd5',
     alignSelf: 'stretch'
   },
   menuTitleText: {
-    fontSize: 16,
-    marginTop: 30,
-    marginLeft: 80,
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 50,
+    marginLeft: 50,
     color: 'white'
   },
   menuButton: {

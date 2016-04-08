@@ -17,6 +17,8 @@ var forceClient = require('./react.force.net.js');
 
 class MainPage extends Component {
 
+  //CINDY: figure out how to call this after user logs in
+  // 
   /*componentWillMount() {
     var that = this;
     var soql = 'SELECT Name FROM User limit 1';

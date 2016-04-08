@@ -67,7 +67,9 @@ var App = React.createClass({
           <View style={{flex: 1, backgroundColor: '#fff'}}>
             <View>
               <View style={Styles.menuTitle}>
-                <Text style={Styles.menuTitleText}>Menu</Text>
+                <Icon name='phone-android' size={18} 
+                  style={{color: 'white', marginLeft: 10, marginTop: 53}}/>
+                <Text style={Styles.menuTitleText}>Agent App</Text>
               </View>
               <Icon.Button name="home" style={Styles.menuButton} color='#545454'
                   onPress={this.gotoMainPage}>
