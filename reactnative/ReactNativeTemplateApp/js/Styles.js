@@ -20,6 +20,7 @@ var Styles = StyleSheet.create({
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
+        backgroundColor: '#246dd5'
     },
     navBarText: {
         fontSize: 18,
@@ -51,7 +52,28 @@ var Styles = StyleSheet.create({
         // Trick to get the thinest line the device can display
         height: 1 / PixelRatio.get(),
         marginLeft: 4,
-    }
+    },
+    drawerStyle: {
+        fontSize: 18,
+        color: 'black',
+        alignSelf: 'center',
+        paddingBottom: 12
+  },
+  menuButton: {
+    height: 36,
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: '#e6e6e6',
+    borderColor: '#cccccc',
+    borderWidth: 1,
+    marginBottom: 10,
+    alignSelf: 'stretch',
+    justifyContent: 'center'
+  },
+  menuText: {
+    fontSize: 16,
+    marginTop: 4
+  }
 });
 
 module.exports = Styles;

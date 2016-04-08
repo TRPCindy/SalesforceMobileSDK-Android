@@ -16,21 +16,27 @@ var Styles = require('./Styles.js');
 var oauth = require('./react.force.oauth');
 var forceClient = require('./react.force.net.js');
 
-var ContactList = React.createClass({
-
+var OppList = React.createClass({
+    getInitialState: function() {
+      var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      return {
+          dataSource: ds.cloneWithRows([]),
+      };
+    },
+    
     componentDidMount: function() {
       var that = this;
       oauth.getAuthCredentials(
         function (resp){
           that.setState({userId: resp['userId']});
-          var soql = 'SELECT Id, Name FROM Contact WHERE Owner.Id = \''
+          var soql = 'SELECT Id, Name FROM Opportunity WHERE Owner.Id = \''
             +that.state.userId+'\'';
           forceClient.query(soql,
             function(response) {
-                var contacts = response.records;
+                var opps = response.records;
                 var data = [];
-                for (var i in contacts) {
-                    data.push(contacts[i]);
+                for (var i in opps) {
+                    data.push(opps[i]);
                 }
                 console.log(data);
 
@@ -42,13 +48,6 @@ var ContactList = React.createClass({
         }, 
         function (resp) {}
       );
-    },
-
-    getInitialState: function() {
-      var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      return {
-          dataSource: ds.cloneWithRows([]),
-      };
     },
 
     getDataSource: function(users: Array<any>): ListViewDataSource {
@@ -64,29 +63,20 @@ var ContactList = React.createClass({
     },
 
     renderRow: function(rowData: Object) {
-      var curName = rowData['Name'];
-      return (
-        <View>
-            <TouchableHighlight
-              style={Styles.row}
-              onPress={() => {
-                this.props.navigator.push({
-                  id: 'Contact',
-                  name: rowData['Name'],
-                  passProps: {contactId: rowData['Id']}
-                })
-              }}>
-              <Text numberOfLines={1} >
-               {rowData['Name']}
-              </Text>
-            </TouchableHighlight>
-            <View style={Styles.cellBorder} />
-        </View>
-      );
+        return (
+                <View>
+                    <View style={Styles.row}>
+                      <Text numberOfLines={1} >
+                       {rowData['Name']}
+                      </Text>
+                    </View>
+                    <View style={Styles.cellBorder} />
+                </View>
+        );
     }
 });
 
-class ContactPage extends Component {
+class OppPage extends Component {
   render() {
     return (
       <Navigator
@@ -100,14 +90,21 @@ class ContactPage extends Component {
   }
   renderScene(route, navigator) {
     return (
-        <ContactList navigator={this.props.navigator}/>
+        <OppList userId={this.props.userId} />
     );
   }
 }
 
 var NavigationBarRouteMapper = {
   LeftButton(route, navigator, index, navState) {
-    return null;
+    return (
+      <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
+          onPress={() => navigator.parentNavigator.pop()}>
+        <Text style={{color: 'white', margin: 10,}}>
+          Menu
+        </Text>
+      </TouchableOpacity>
+    );
   },
   RightButton(route, navigator, index, navState) {
     return null;
@@ -117,4 +114,4 @@ var NavigationBarRouteMapper = {
   }
 };
 
-module.exports = ContactPage;
+module.exports = OppPage;

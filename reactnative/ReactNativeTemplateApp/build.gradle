@@ -1,4 +1,5 @@
 apply plugin: 'android'
+apply from: "./node_modules/react-native-vector-icons/fonts.gradle"
 
 dependencies {
     compile project(':libs:SalesforceReact')
