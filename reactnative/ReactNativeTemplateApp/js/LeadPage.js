@@ -26,28 +26,22 @@ var LeadList = React.createClass({
     
     componentDidMount: function() {
       var that = this;
-      oauth.getAuthCredentials(
-        function (resp){
-          that.setState({userId: resp['userId']});
-          var soql = 'SELECT Id, Name FROM Lead WHERE Owner.Id = \''
-            +that.state.userId+'\'';
-          forceClient.query(soql,
-            function(response) {
-                var leads = response.records;
-                var data = [];
-                for (var i in leads) {
-                    data.push(leads[i]);
-                }
-                console.log(data);
+      var soql = 'SELECT Id, Name FROM Lead WHERE Owner.Id = \''
+        +that.props.userId+'\'';
+      forceClient.query(soql,
+        function(response) {
+            var leads = response.records;
+            var data = [];
+            for (var i in leads) {
+                data.push(leads[i]);
+            }
+            console.log(data);
 
-                that.setState({
-                    dataSource: that.getDataSource(data),
-                });
-
+            that.setState({
+                dataSource: that.getDataSource(data),
             });
-        }, 
-        function (resp) {}
-      );
+
+        });
     },
 
     getDataSource: function(users: Array<any>): ListViewDataSource {

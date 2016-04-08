@@ -26,39 +26,65 @@
  */
 package com.salesforce.androidsdk.reactnative.ui;
 
-import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.react.ReactActivity;
-import com.salesforce.androidsdk.accounts.UserAccountManager;
+import com.facebook.react.bridge.Callback;
 import com.salesforce.androidsdk.app.SalesforceSDKManager;
+import com.salesforce.androidsdk.reactnative.R;
+import com.salesforce.androidsdk.reactnative.bridge.ReactBridgeHelper;
 import com.salesforce.androidsdk.rest.ClientManager;
-import com.salesforce.androidsdk.rest.ClientManager.LoginOptions;
 import com.salesforce.androidsdk.rest.ClientManager.RestClientCallback;
 import com.salesforce.androidsdk.rest.RestClient;
 import com.salesforce.androidsdk.security.PasscodeManager;
 import com.salesforce.androidsdk.util.EventsObservable;
 import com.salesforce.androidsdk.util.EventsObservable.EventType;
-import com.salesforce.androidsdk.util.UserSwitchReceiver;
 
 /**
  * Super class for all Salesforce activities.
  */
 public abstract class SalesforceReactActivity extends ReactActivity {
 
+    private static final String TAG = "SfReactActivity";
+
+    private RestClient client;
+    private ClientManager clientManager;
     private PasscodeManager passcodeManager;
-    private UserSwitchReceiver userSwitchReceiver;
+
+    /**
+     * @return true if you want login to happen as soon as activity is loaded
+     *         false if you want do login at a later point
+     */
+    public boolean shouldAuthenticate() {
+        return true;
+    }
+
+    /**
+     * Called if shouldAuthenticate() returned true but device is offline
+     */
+    public void onErrorAuthenticateOffline() {
+        Toast t = Toast.makeText(this, R.string.sf__should_authenticate_but_is_offline, Toast.LENGTH_LONG);
+        t.show();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.i(TAG, "onCreate called");
         super.onCreate(savedInstanceState);
+
+        // Get clientManager
+        clientManager = buildClientManager();
 
         // Gets an instance of the passcode manager.
         passcodeManager = SalesforceSDKManager.getInstance().getPasscodeManager();
-        userSwitchReceiver = new ActivityUserSwitchReceiver();
-        registerReceiver(userSwitchReceiver, new IntentFilter(UserAccountManager.USER_SWITCH_INTENT_ACTION));
 
-        // Lets observers know that activity creation is complete.
+        // TODO
+        // Have a user switcher once we have an account manager bridge for react native
+
+        // Let observers know
         EventsObservable.get().notifyEvent(EventType.MainActivityCreateComplete, this);
     }
 
@@ -69,27 +95,51 @@ public abstract class SalesforceReactActivity extends ReactActivity {
         // Brings up the passcode screen if needed.
         if (passcodeManager.onResume(this)) {
 
-            // Gets login options.
-            final String accountType = SalesforceSDKManager.getInstance().getAccountType();
-            final LoginOptions loginOptions = SalesforceSDKManager.getInstance().getLoginOptions();
+            // Get client (if already logged in)
+            try {
+                client = clientManager.peekRestClient();
+            } catch (ClientManager.AccountInfoNotFoundException e) {
+                client = null;
+            }
 
-            // Gets a rest client.
-            new ClientManager(this, accountType, loginOptions,
-                    SalesforceSDKManager.getInstance().shouldLogoutWhenTokenRevoked()).getRestClient(this, new RestClientCallback() {
-
-                @Override
-                public void authenticatedRestClient(RestClient client) {
-                    if (client == null) {
-                        SalesforceSDKManager.getInstance().logout(SalesforceReactActivity.this);
-                        return;
-                    }
-
-                    // Lets observers know that rendition is complete.
-                    EventsObservable.get().notifyEvent(EventType.RenditionComplete);
-                }
-            });
+            // Not logged in
+            if (client == null) {
+                onResumeNotLoggedIn();
+            }
+            // Logged in
+            else {
+                Log.i(TAG, "onResume - Already logged in");
+            }
         }
     }
+
+    /**
+     * Called when resuming activity and user is not authenticated
+     */
+    private void onResumeNotLoggedIn() {
+
+        // Need to be authenticated
+        if (shouldAuthenticate()) {
+
+            // Online
+            if (SalesforceSDKManager.getInstance().hasNetwork()) {
+                Log.i(TAG, "onResumeNotLoggedIn - Should authenticate / online - authenticating");
+                login();
+            }
+
+            // Offline
+            else {
+                Log.w(TAG, "onResumeNotLoggedIn - Should authenticate / offline - cannot proceed");
+                onErrorAuthenticateOffline();
+            }
+        }
+
+        // Does not need to be authenticated
+        else {
+            Log.i(TAG, "onResumeNotLoggedIn - Should not authenticate");
+        }
+    }
+
 
     @Override
     public void onUserInteraction() {
@@ -102,50 +152,74 @@ public abstract class SalesforceReactActivity extends ReactActivity {
         passcodeManager.onPause(this);
     }
 
-    @Override
-    public void onDestroy() {
-        unregisterReceiver(userSwitchReceiver);
-        super.onDestroy();
-    }
-
-    /**
-     * Refreshes the client if the user has been switched.
-     */
-    protected void refreshIfUserSwitched() {
-        if (passcodeManager.onResume(this)) {
-
-            // Gets login options.
-            final String accountType = SalesforceSDKManager.getInstance().getAccountType();
-            final LoginOptions loginOptions = SalesforceSDKManager.getInstance().getLoginOptions();
-
-            // Gets a rest client.
-            new ClientManager(this, accountType, loginOptions,
-                    SalesforceSDKManager.getInstance().shouldLogoutWhenTokenRevoked()).getRestClient(this, new RestClientCallback() {
-
-                @Override
-                public void authenticatedRestClient(RestClient client) {
-                    if (client == null) {
-                        SalesforceSDKManager.getInstance().logout(SalesforceReactActivity.this);
-                        return;
-                    }
-
-                    // Lets observers know that rendition is complete.
-                    EventsObservable.get().notifyEvent(EventType.RenditionComplete);
+    protected void login() {
+        Log.i(TAG, "login called");
+        clientManager.getRestClient(this, new RestClientCallback() {
+            @Override
+            public void authenticatedRestClient(RestClient client) {
+                if (client == null) {
+                    Log.i(TAG, "login - authenticatedRestClient called with null client");
+                    logout(null);
+                } else {
+                    Log.i(TAG, "login - authenticatedRestClient called with actual client");
+                    SalesforceReactActivity.this.recreate(); // starting fresh
                 }
-            });
-        }
+            }
+        });
     }
 
     /**
-     * Acts on the user switch event.
-     *
-     * @author bhariharan
+     * Method called from bridge to logout
+     * @param successCallback
      */
-    private class ActivityUserSwitchReceiver extends UserSwitchReceiver {
+    public void logout(Callback successCallback) {
+        Log.i(TAG, "logout called");
+        SalesforceSDKManager.getInstance().logout(this);
+    }
 
-        @Override
-        protected void onUserSwitch() {
-            refreshIfUserSwitched();
+
+    /**
+     * Method called from bridge to authenticate
+     * @param successCallback
+     * @param errorCallback
+     */
+    public void authenticate(final Callback successCallback, final Callback errorCallback) {
+        Log.i(TAG, "authenticate called");
+        clientManager.getRestClient(this, new RestClientCallback() {
+            @Override
+            public void authenticatedRestClient(RestClient client) {
+                SalesforceReactActivity.this.client = client;
+                getAuthCredentials(successCallback, errorCallback);
+            }
+        });
+    }
+
+    /**
+     * Method called from bridge to get auth credentials
+     * @param successCallback
+     * @param errorCallback
+     */
+    public void getAuthCredentials(Callback successCallback, Callback errorCallback) {
+        Log.i(TAG, "getAuthCredentials called");
+        if (client != null) {
+            if (successCallback != null) {
+                ReactBridgeHelper.invokeSuccess(successCallback, client.getJSONCredentials());
+            }
+        } else {
+            if (errorCallback != null) {
+                errorCallback.invoke("Not authenticated");
+            }
         }
     }
+
+    public RestClient getRestClient() {
+        return client;
+    }
+
+    protected ClientManager buildClientManager() {
+        return new ClientManager(this, SalesforceSDKManager.getInstance().getAccountType(),
+                SalesforceSDKManager.getInstance().getLoginOptions(),
+                SalesforceSDKManager.getInstance().shouldLogoutWhenTokenRevoked());
+    }
+
 }

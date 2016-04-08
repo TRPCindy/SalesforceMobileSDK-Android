@@ -6,6 +6,7 @@ var {
   Component,
   View,
   Text,
+  ListView,
   Navigator,
   TouchableHighlight,
   TouchableOpacity
@@ -17,31 +18,6 @@ var forceClient = require('./react.force.net.js');
 
 class MainPage extends Component {
 
-  //CINDY: figure out how to call this after user logs in
-  // 
-  /*componentWillMount() {
-    var that = this;
-    var soql = 'SELECT Name FROM User limit 1';
-    forceClient.query(soql,
-      function(response) {
-        oauth.getAuthCredentials(
-          function (resp){
-            that.setState({userId: resp['userId']});
-            var soql = 'SELECT Name FROM User WHERE Id = \''
-              +that.state.userId+'\' limit 1';
-            forceClient.query(soql,
-              function(response) {
-                  var user = response.records[0];
-                  that.setState({userName: user['Name']});
-              }
-            );
-          }, 
-          function (resp) {}
-        );
-      }
-    );
-  }*/
-
   render() {
     return (
       <Navigator
@@ -49,18 +25,36 @@ class MainPage extends Component {
           navigator={this.props.navigator} />
     );
   }
+
+  // CINDY: have a section on top that's 'Overdue'
+  // below that is 'Due Today'
+  // below that is 'Due Later'
+  // have a red flag beside Priority tasks
+
   renderScene(route, navigator) {
     var that = this;
-    var userName = '';
-    if (that.props !== null) {
-      userName = that.props.userName;
-    }
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent:'center'}}>
-          <Text style={Styles.textStyle}>Welcome {userName}!</Text>
+      <View style={{flex: 1}}>
+          <Text style={Styles.textStyle}>Welcome {that.props.userName}!</Text>
+          <ListView style={Styles.scene}
+              dataSource={this.props.dataSource}
+              renderRow={this.renderRow} />
       </View>
     );
   }
+
+  renderRow(rowData: Object) {
+      return (
+        <View>
+            <View style={Styles.row}>
+              <Text numberOfLines={1} style={Styles.textStyle}>
+               {rowData['Subject']}
+              </Text>
+            </View>
+            <View style={Styles.cellBorder} />
+        </View>
+      );
+    }
 }
 
 module.exports = MainPage;

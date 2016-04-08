@@ -20,28 +20,22 @@ var ContactList = React.createClass({
 
     componentDidMount: function() {
       var that = this;
-      oauth.getAuthCredentials(
-        function (resp){
-          that.setState({userId: resp['userId']});
-          var soql = 'SELECT Id, Name FROM Contact WHERE Owner.Id = \''
-            +that.state.userId+'\'';
-          forceClient.query(soql,
-            function(response) {
-                var contacts = response.records;
-                var data = [];
-                for (var i in contacts) {
-                    data.push(contacts[i]);
-                }
-                console.log(data);
+      var soql = 'SELECT Id, Name FROM Contact WHERE Owner.Id = \''
+        +that.props.userId+'\'';
+      forceClient.query(soql,
+        function(response) {
+            var contacts = response.records;
+            var data = [];
+            for (var i in contacts) {
+                data.push(contacts[i]);
+            }
+            console.log(data);
 
-                that.setState({
-                    dataSource: that.getDataSource(data),
-                });
-
+            that.setState({
+                dataSource: that.getDataSource(data),
             });
-        }, 
-        function (resp) {}
-      );
+
+        });
     },
 
     getInitialState: function() {
@@ -100,7 +94,7 @@ class ContactPage extends Component {
   }
   renderScene(route, navigator) {
     return (
-        <ContactList navigator={this.props.navigator}/>
+        <ContactList navigator={this.props.navigator} userId={this.props.userId} />
     );
   }
 }

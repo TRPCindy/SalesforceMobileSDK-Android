@@ -36,6 +36,7 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.salesforce.androidsdk.accounts.UserAccount;
 import com.salesforce.androidsdk.app.SalesforceSDKManager;
+import com.salesforce.androidsdk.reactnative.ui.SalesforceReactActivity;
 import com.salesforce.androidsdk.rest.RestClient;
 import com.salesforce.androidsdk.rest.RestRequest;
 import com.salesforce.androidsdk.rest.RestResponse;
@@ -88,6 +89,10 @@ public class SalesforceNetReactBridge extends ReactContextBaseJavaModule {
 
             // Sending request
             RestClient restClient = getRestClient();
+
+            if (restClient == null)
+                return; // we are detached - do nothing
+
             restClient.sendAsync(request, new RestClient.AsyncRequestCallback() {
                 @Override
                 public void onSuccess(RestRequest request, RestResponse response) {
@@ -150,15 +155,8 @@ public class SalesforceNetReactBridge extends ReactContextBaseJavaModule {
     }
 
     private RestClient getRestClient() {
-        if (restClient == null) {
-            UserAccount account = SalesforceSDKManager.getInstance().getUserAccountManager().getCurrentUser();
-            if (account == null) {
-                restClient = SalesforceSDKManager.getInstance().getClientManager().peekUnauthenticatedRestClient();
-            } else {
-                restClient = SalesforceSDKManager.getInstance().getClientManager().peekRestClient(account);
-            }
-        }
-        return restClient;
+        final SalesforceReactActivity currentActivity = (SalesforceReactActivity) getCurrentActivity();
+        return currentActivity != null ? currentActivity.getRestClient() : null;
     }
 
     private static String buildQueryString(Map<String, String> params) throws UnsupportedEncodingException {

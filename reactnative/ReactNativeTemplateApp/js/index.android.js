@@ -31,17 +31,66 @@ var OppPage = require('./OppPage');
 
 var App = React.createClass({
 
+    getInitialState: function() {
+        var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+        return {
+            dataSource: ds.cloneWithRows([]),
+            authenticated: false
+        };
+    },
+
+    getDataSource: function(users: Array<any>): ListViewDataSource {
+        return this.state.dataSource.cloneWithRows(users);
+    },
+
+    componentDidMount: function() {
+        var that = this;
+        oauth.authenticate(
+            function() {
+                that.setState({authenticated:true});
+                oauth.getAuthCredentials(
+                  function (resp){
+                    that.setState({userId: resp['userId']});
+                    var soql = 'SELECT Name FROM User WHERE Id = \''
+                      +that.state.userId+'\' limit 1';
+                    forceClient.query(soql,
+                      function(response) {
+                          var user = response.records[0];
+                          that.setState({userName: user['Name']});
+                      }
+                    );
+                    var soql2 = 'SELECT Subject,ActivityDate FROM Task WHERE OwnerId = \''
+                      +that.state.userId+ '\' and IsClosed = false';
+                    forceClient.query(soql2,
+                      function(response) {
+                          console.log(response.records);
+                          var data = response.records;
+                          that.setState({
+                              dataSource: that.getDataSource(data),
+                          });
+                      }
+                    );
+                  }, 
+                  function (resp) {}
+                );
+            },
+            function(error) {
+                console.log('Failed to authenticate:' + error);
+            }
+        );
+    },
+
     renderScene: function(route, navigator) {
       var that = this;
       var routeId = route.id;
       if (routeId === 'MainPage') {
         return (
-          <MainPage navigator={navigator}/>
+          <MainPage navigator={navigator} userName={that.state.userName} dataSource={that.state.dataSource}/>
         );
       }
       if (routeId === 'ContactPage') {
         return (
-          <ContactPage navigator={navigator} />
+          <ContactPage navigator={navigator} userId={that.state.userId} />
         );
       }
       if (routeId === 'Contact') {
@@ -51,12 +100,12 @@ var App = React.createClass({
       }
       if (routeId === 'LeadPage') {
         return (
-          <LeadPage navigator={navigator} />
+          <LeadPage navigator={navigator} userId={that.state.userId} />
         );
       }
       if (routeId === 'OppPage') {
         return (
-          <OppPage navigator={navigator} />
+          <OppPage navigator={navigator} userId={that.state.userId} />
         );
       }
     },

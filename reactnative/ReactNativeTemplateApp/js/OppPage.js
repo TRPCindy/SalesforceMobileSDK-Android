@@ -26,28 +26,22 @@ var OppList = React.createClass({
     
     componentDidMount: function() {
       var that = this;
-      oauth.getAuthCredentials(
-        function (resp){
-          that.setState({userId: resp['userId']});
-          var soql = 'SELECT Id, Name FROM Opportunity WHERE Owner.Id = \''
-            +that.state.userId+'\'';
-          forceClient.query(soql,
-            function(response) {
-                var opps = response.records;
-                var data = [];
-                for (var i in opps) {
-                    data.push(opps[i]);
-                }
-                console.log(data);
+      var soql = 'SELECT Id, Name FROM Opportunity WHERE Owner.Id = \''
+        +that.props.userId+'\'';
+      forceClient.query(soql,
+        function(response) {
+            var opps = response.records;
+            var data = [];
+            for (var i in opps) {
+                data.push(opps[i]);
+            }
+            console.log(data);
 
-                that.setState({
-                    dataSource: that.getDataSource(data),
-                });
-
+            that.setState({
+                dataSource: that.getDataSource(data),
             });
-        }, 
-        function (resp) {}
-      );
+
+        });
     },
 
     getDataSource: function(users: Array<any>): ListViewDataSource {
