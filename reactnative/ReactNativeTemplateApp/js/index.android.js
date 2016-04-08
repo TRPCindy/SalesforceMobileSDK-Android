@@ -31,37 +31,10 @@ var OppPage = require('./OppPage');
 
 var App = React.createClass({
 
-    //CINDY: cannot keep getAuthCredentials in index
-  // app crashes when user not logged in!
-  // find way to check if user logged in, or migrate auth to other classes
-
-    /*componentDidMount: function() {
-      var that = this;
-      oauth.getAuthCredentials(
-        function (resp){
-          that.setState({userId: resp['userId']});
-          var soql = 'SELECT Name FROM User WHERE Id = \''
-            +that.state.userId+'\' limit 1';
-          forceClient.query(soql,
-            function(response) {
-                var user = response.records[0];
-                that.setState({userName: user['Name']});
-            }
-          );
-        }, 
-        function (resp) {}
-      );
-    },*/
-
     renderScene: function(route, navigator) {
       var that = this;
       var routeId = route.id;
       if (routeId === 'MainPage') {
-        if (that.state !== null) {
-          return (
-            <MainPage navigator={navigator}/>
-          );
-        }
         return (
           <MainPage navigator={navigator}/>
         );
@@ -92,36 +65,31 @@ var App = React.createClass({
         var that = this;
         var navigationView = (
           <View style={{flex: 1, backgroundColor: '#fff'}}>
-            <View style={{marginTop:20}}>
-              <TouchableHighlight
-                style={Styles.menuButton}
-                onPress={this.gotoMainPage}>
-                <Text style={Styles.menuText}>Home</Text>
-              </TouchableHighlight>
-
-              <TouchableHighlight
-                style={Styles.menuButton}
-                onPress={this.gotoContactPage}>
-                <Text style={Styles.menuText}>Contacts</Text>
-              </TouchableHighlight>
-
-              <TouchableHighlight
-                style={Styles.menuButton}
-                onPress={this.gotoLeadPage}>
-                <Text style={Styles.menuText}>Leads</Text>
-              </TouchableHighlight>
-
-              <TouchableHighlight
-                style={Styles.menuButton}
-                onPress={this.gotoOppPage}>
-                <Text style={Styles.menuText}>Opportunities</Text>
-              </TouchableHighlight>
-
-              <TouchableHighlight
-                style={Styles.menuButton}
-                onPress={this.logout}>
-                <Text style={Styles.menuText}>Logout</Text>
-              </TouchableHighlight>
+            <View>
+              <View style={Styles.menuTitle}>
+                <Text style={Styles.menuTitleText}>Menu</Text>
+              </View>
+              <Icon.Button name="home" style={Styles.menuButton} color='#545454'
+                  onPress={this.gotoMainPage}>
+                  <Text style={Styles.menuText}>Home</Text>
+              </Icon.Button>
+              <Icon.Button name="account-box" style={Styles.menuButton} color='#545454'
+                  onPress={this.gotoContactPage}>
+                  <Text style={Styles.menuText}>Contacts</Text>
+              </Icon.Button>
+              <Icon.Button name="adjust" style={Styles.menuButton} color='#545454'
+                  onPress={this.gotoLeadPage}>
+                  <Text style={Styles.menuText}>Leads</Text>
+              </Icon.Button>
+              <Icon.Button name="assignment" style={Styles.menuButton} color='#545454'
+                  onPress={this.gotoOppPage}>
+                  <Text style={Styles.menuText}>Opportunities</Text>
+              </Icon.Button>
+              <View style={Styles.cellBorder} />
+              <Icon.Button name="exit-to-app" style={Styles.menuButton} color='#545454'
+                  onPress={this.logout}>
+                  <Text style={Styles.menuText}>Logout</Text>
+              </Icon.Button>
             </View>
           </View>
         );
@@ -132,25 +100,25 @@ var App = React.createClass({
             drawerPosition={DrawerLayoutAndroid.positions.Left}
             renderNavigationView={() => navigationView}>
             <Navigator
-                  ref = {(navigator) => global.navigator = navigator}
-                  style={Styles.container}
-                  initialRoute={{
-                    id: 'MainPage', 
-                    name: 'Home'
-                  }}
-                  renderScene={(route, navigator) => this.renderScene(route, navigator)}
-                  configureScene={(route) => {
-                    if (route.sceneConfig) {
-                      return route.sceneConfig;
-                    }
-                    return Navigator.SceneConfigs.FadeAndroid;
-                  }}
-                  navigationBar={
-                      <Navigator.NavigationBar
-                        routeMapper={NavigationBarRouteMapper}
-                        style={Styles.navBar} />
+                ref={(navigator) => global.navigator = navigator}
+                style={Styles.container}
+                initialRoute={{
+                  id: 'MainPage', 
+                  name: 'Home'
+                }}
+                renderScene={(route, navigator) => this.renderScene(route, navigator)}
+                configureScene={(route) => {
+                  if (route.sceneConfig) {
+                    return route.sceneConfig;
                   }
-                />
+                  return Navigator.SceneConfigs.FadeAndroid;
+                }}
+                navigationBar={
+                    <Navigator.NavigationBar
+                      routeMapper={NavigationBarRouteMapper}
+                      style={Styles.navBar} />
+                }
+              />
           </DrawerLayoutAndroid>
         );
     },
@@ -186,9 +154,10 @@ var App = React.createClass({
       });
       closeDrawer();
     },
-    
+
     logout:function() {
       oauth.logout();
+      closeDrawer();
     }
 });
 

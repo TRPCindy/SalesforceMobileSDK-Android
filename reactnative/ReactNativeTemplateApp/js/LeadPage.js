@@ -66,7 +66,7 @@ var LeadList = React.createClass({
         return (
           <View>
               <View style={Styles.row}>
-                <Text numberOfLines={1} >
+                <Text numberOfLines={1} style={Styles.textStyle}>
                  {rowData['Name']}
                 </Text>
               </View>

@@ -17,23 +17,28 @@ var forceClient = require('./react.force.net.js');
 
 class MainPage extends Component {
 
-  // componentWillMount() {
-  //   var that = this;
-  //   oauth.getAuthCredentials(
-  //     function (resp){
-  //       that.setState({userId: resp['userId']});
-  //       var soql = 'SELECT Name FROM User WHERE Id = \''
-  //         +that.state.userId+'\' limit 1';
-  //       forceClient.query(soql,
-  //         function(response) {
-  //             var user = response.records[0];
-  //             that.setState({userName: user['Name']});
-  //         }
-  //       );
-  //     }, 
-  //     function (resp) {}
-  //   );
-  // }
+  /*componentWillMount() {
+    var that = this;
+    var soql = 'SELECT Name FROM User limit 1';
+    forceClient.query(soql,
+      function(response) {
+        oauth.getAuthCredentials(
+          function (resp){
+            that.setState({userId: resp['userId']});
+            var soql = 'SELECT Name FROM User WHERE Id = \''
+              +that.state.userId+'\' limit 1';
+            forceClient.query(soql,
+              function(response) {
+                  var user = response.records[0];
+                  that.setState({userName: user['Name']});
+              }
+            );
+          }, 
+          function (resp) {}
+        );
+      }
+    );
+  }*/
 
   render() {
     return (
@@ -45,13 +50,12 @@ class MainPage extends Component {
   renderScene(route, navigator) {
     var that = this;
     var userName = '';
-    if (that.state !== null) {
-      userName = that.state.userName;
-      console.log(navigator);
+    if (that.props !== null) {
+      userName = that.props.userName;
     }
     return (
       <View style={{flex: 1, alignItems: 'center', justifyContent:'center'}}>
-          <Text>Welcome {userName}!</Text>
+          <Text style={Styles.textStyle}>Welcome {userName}!</Text>
       </View>
     );
   }

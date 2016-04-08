@@ -76,7 +76,7 @@ var ContactList = React.createClass({
                   passProps: {contactId: rowData['Id']}
                 })
               }}>
-              <Text numberOfLines={1} >
+              <Text numberOfLines={1} style={Styles.textStyle} >
                {rowData['Name']}
               </Text>
             </TouchableHighlight>

@@ -16,6 +16,9 @@ var Styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
     },
+    textStyle: {
+        color: '#545454'
+    },
     navBar: {
         height: 50,
         flexDirection: 'row',
@@ -59,20 +62,30 @@ var Styles = StyleSheet.create({
         alignSelf: 'center',
         paddingBottom: 12
   },
-  menuButton: {
-    height: 36,
+  menuTitle: {
+    height: 70,
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#e6e6e6',
-    borderColor: '#cccccc',
-    borderWidth: 1,
-    marginBottom: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
+    backgroundColor: '#246dd5',
+    alignSelf: 'stretch'
+  },
+  menuTitleText: {
+    fontSize: 16,
+    marginTop: 30,
+    marginLeft: 80,
+    color: 'white'
+  },
+  menuButton: {
+    height: 50,
+    flex: 1,
+    backgroundColor: 'white',
+    flexDirection: 'row',
+    alignSelf: 'stretch'
   },
   menuText: {
     fontSize: 16,
-    marginTop: 4
+    marginLeft: 40,
+    color: '#545454'
   }
 });
 
