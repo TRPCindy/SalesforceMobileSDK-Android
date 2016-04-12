@@ -26,7 +26,7 @@ var ContactPage = require('./ContactPage');
 var Contact = require('./Contact');
 var LeadPage = require('./LeadPage');
 var OppPage = require('./OppPage');
-
+var MetricsPage = require('./MetricsPage');
 
 
 var App = React.createClass({
@@ -63,7 +63,6 @@ var App = React.createClass({
                       +that.state.userId+ '\' and IsClosed = false';
                     forceClient.query(soql2,
                       function(response) {
-                          console.log(response.records);
                           var data = response.records;
                           that.setState({
                               dataSource: that.getDataSource(data),
@@ -85,7 +84,7 @@ var App = React.createClass({
       var routeId = route.id;
       if (routeId === 'MainPage') {
         return (
-          <MainPage navigator={navigator} userName={that.state.userName} dataSource={that.state.dataSource}/>
+          <MainPage navigator={navigator} userName={that.state.userName} />
         );
       }
       if (routeId === 'ContactPage') {
@@ -106,6 +105,11 @@ var App = React.createClass({
       if (routeId === 'OppPage') {
         return (
           <OppPage navigator={navigator} userId={that.state.userId} />
+        );
+      }
+      if (routeId === 'MetricsPage') {
+        return (
+          <MetricsPage navigator={navigator} userId={that.state.userId} />
         );
       }
     },
@@ -135,6 +139,10 @@ var App = React.createClass({
               <Icon.Button name="assignment" style={Styles.menuButton} color='#545454'
                   onPress={this.gotoOppPage}>
                   <Text style={Styles.menuText}>Opportunities</Text>
+              </Icon.Button>
+              <Icon.Button name="insert-chart" style={Styles.menuButton} color='#545454'
+                  onPress={this.gotoMetricsPage}>
+                  <Text style={Styles.menuText}>Agent Metrics</Text>
               </Icon.Button>
               <View style={Styles.cellBorder} />
               <Icon.Button name="exit-to-app" style={Styles.menuButton} color='#545454'
@@ -202,6 +210,14 @@ var App = React.createClass({
       global.navigator.push({
         id: 'OppPage',
         name: 'Opportunities',
+      });
+      closeDrawer();
+    },
+
+    gotoMetricsPage:function() {
+      global.navigator.push({
+        id: 'MetricsPage',
+        name: 'Agent Metrics',
       });
       closeDrawer();
     },

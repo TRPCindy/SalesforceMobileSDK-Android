@@ -75,11 +75,7 @@ class OppPage extends Component {
     return (
       <Navigator
           renderScene={(route, navigator) => this.renderScene(route, navigator)}
-          navigator={this.props.navigator}
-          navigationBar={
-            <Navigator.NavigationBar style={{backgroundColor: '#246dd5'}}
-                routeMapper={NavigationBarRouteMapper} />
-          } />
+          navigator={this.props.navigator} />
     );
   }
   renderScene(route, navigator) {
@@ -88,24 +84,5 @@ class OppPage extends Component {
     );
   }
 }
-
-var NavigationBarRouteMapper = {
-  LeftButton(route, navigator, index, navState) {
-    return (
-      <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
-          onPress={() => navigator.parentNavigator.pop()}>
-        <Text style={{color: 'white', margin: 10,}}>
-          Menu
-        </Text>
-      </TouchableOpacity>
-    );
-  },
-  RightButton(route, navigator, index, navState) {
-    return null;
-  },
-  Title(route, navigator, index, navState) {
-    return null;
-  }
-};
 
 module.exports = OppPage;

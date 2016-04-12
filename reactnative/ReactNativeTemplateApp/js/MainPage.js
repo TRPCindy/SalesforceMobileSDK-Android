@@ -7,6 +7,7 @@ var {
   View,
   Text,
   ListView,
+  ScrollView,
   Navigator,
   TouchableHighlight,
   TouchableOpacity
@@ -15,6 +16,116 @@ var {
 var Styles = require('./Styles.js');
 var oauth = require('./react.force.oauth');
 var forceClient = require('./react.force.net.js');
+
+var TaskList = React.createClass({
+    getInitialState: function() {
+      var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      return {
+        overdue: ds.cloneWithRows([]),
+        today: ds.cloneWithRows([]),
+        future: ds.cloneWithRows([]),
+        authenticated: false
+      };
+    },
+    
+    componentDidMount: function() {
+      var that = this;
+      oauth.authenticate(
+          function() {
+              that.setState({authenticated:true});
+              oauth.getAuthCredentials(function (resp){
+                  that.setState({userId: resp['userId']});
+                  var soql = 'SELECT Subject,ActivityDate FROM Task WHERE OwnerId = \''
+                    +that.state.userId+ '\' and IsClosed = false';
+                  forceClient.query(soql,
+                    function(response) {
+                        var todayStart = new Date();
+                        todayStart.setHours(0,0,0,0);
+                        var todayEnd = new Date();
+                        todayEnd.setHours(23,59,59,999);
+                        console.log(today);
+                        var overdue = [];
+                        var today = [];
+                        var future = [];
+                        response.records.forEach(function(item) {
+                          var taskDate = new Date(item['ActivityDate']);
+                          if (taskDate < todayStart) {
+                            overdue.push(item);
+                          } else if (taskDate > todayEnd) {
+                            future.push(item);
+                          } else {
+                            today.push(item);
+                          }
+                        });
+                        that.setState({
+                            overdue: that.state.overdue.cloneWithRows(overdue),
+                            today: that.state.today.cloneWithRows(today),
+                            future: that.state.future.cloneWithRows(future)
+                        });
+                    }
+                  );
+                },
+                function (resp) {}
+              );
+          },
+          function(error) {
+              console.log('Failed to authenticate:' + error);
+          }
+      );
+    },
+
+    render: function() {
+      var that = this;
+      return (
+        <View style={Styles.scene}>
+          <ScrollView>
+            <View style={Styles.row}>
+              <Text numberOfLines={1} style={Styles.textStyle}>
+                Welcome {that.props.userName}!
+              </Text>
+            </View>
+            <View style={Styles.rowColor}>
+              <Text numberOfLines={1} style={{color:'white'}}>
+                Overdue Tasks
+              </Text>
+            </View>
+            <ListView style={{flex: 1}}
+                dataSource={that.state.overdue}
+                renderRow={this.renderRow} />
+            <View style={Styles.rowColor}>
+              <Text numberOfLines={1} style={{color:'white'}}>
+                Due Today
+              </Text>
+            </View>
+            <ListView style={{flex: 1}}
+                dataSource={that.state.today}
+                renderRow={this.renderRow} />
+            <View style={Styles.rowColor}>
+              <Text numberOfLines={1} style={{color:'white'}}>
+                Due Later
+              </Text>
+            </View>
+            <ListView style={{flex: 1}}
+                dataSource={that.state.future}
+                renderRow={this.renderRow} />
+          </ScrollView>
+        </View>
+      );
+    },
+
+    renderRow: function(rowData: Object) {
+        return (
+          <View>
+              <View style={Styles.row}>
+                <Text numberOfLines={1} style={Styles.textStyle}>
+                 {rowData['Subject']}
+                </Text>
+              </View>
+              <View style={Styles.cellBorder} />
+          </View>
+        );
+    }
+});
 
 class MainPage extends Component {
 
@@ -26,35 +137,13 @@ class MainPage extends Component {
     );
   }
 
-  // CINDY: have a section on top that's 'Overdue'
-  // below that is 'Due Today'
-  // below that is 'Due Later'
-  // have a red flag beside Priority tasks
-
+  // CINDY: have a red flag beside Priority tasks
   renderScene(route, navigator) {
     var that = this;
-    return (
-      <View style={{flex: 1}}>
-          <Text style={Styles.textStyle}>Welcome {that.props.userName}!</Text>
-          <ListView style={Styles.scene}
-              dataSource={this.props.dataSource}
-              renderRow={this.renderRow} />
-      </View>
-    );
-  }
-
-  renderRow(rowData: Object) {
-      return (
-        <View>
-            <View style={Styles.row}>
-              <Text numberOfLines={1} style={Styles.textStyle}>
-               {rowData['Subject']}
-              </Text>
-            </View>
-            <View style={Styles.cellBorder} />
-        </View>
+    return(
+      <TaskList userName={that.props.userName} />
       );
-    }
+  }
 }
 
 module.exports = MainPage;
