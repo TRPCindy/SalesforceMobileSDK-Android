@@ -34,13 +34,8 @@ var App = React.createClass({
     getInitialState: function() {
         var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
         return {
-            dataSource: ds.cloneWithRows([]),
             authenticated: false
         };
-    },
-
-    getDataSource: function(users: Array<any>): ListViewDataSource {
-        return this.state.dataSource.cloneWithRows(users);
     },
 
     componentDidMount: function() {
@@ -57,16 +52,6 @@ var App = React.createClass({
                       function(response) {
                           var user = response.records[0];
                           that.setState({userName: user['Name']});
-                      }
-                    );
-                    var soql2 = 'SELECT Subject,ActivityDate FROM Task WHERE OwnerId = \''
-                      +that.state.userId+ '\' and IsClosed = false';
-                    forceClient.query(soql2,
-                      function(response) {
-                          var data = response.records;
-                          that.setState({
-                              dataSource: that.getDataSource(data),
-                          });
                       }
                     );
                   }, 
@@ -108,8 +93,10 @@ var App = React.createClass({
         );
       }
       if (routeId === 'MetricsPage') {
+        var curDat = [{date:'2016-04-13','pts':1, 'ast':2, 'reb':3, 'stl':4, 'blk':5, 'tov':6, 'min':7},
+          {date:'2016-04-12','pts':9, 'ast':2, 'reb':6, 'stl':4, 'blk':5, 'tov':6, 'min':5}];
         return (
-          <MetricsPage navigator={navigator} userId={that.state.userId} />
+          <MetricsPage navigator={navigator} userId={that.state.userId} data={curDat} />
         );
       }
     },

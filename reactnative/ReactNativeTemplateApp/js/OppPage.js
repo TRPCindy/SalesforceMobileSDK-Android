@@ -7,6 +7,7 @@ var {
   View,
   Text,
   ListView,
+  ScrollView,
   Navigator,
   TouchableHighlight,
   TouchableOpacity
@@ -15,16 +16,18 @@ var {
 var Styles = require('./Styles.js');
 var oauth = require('./react.force.oauth');
 var forceClient = require('./react.force.net.js');
+var GiftedSpinner = require('react-native-gifted-spinner');
 
 var OppList = React.createClass({
     getInitialState: function() {
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       return {
           dataSource: ds.cloneWithRows([]),
+          loaded: false
       };
     },
     
-    componentDidMount: function() {
+    componentWillMount: function() {
       var that = this;
       var soql = 'SELECT Id, Name FROM Opportunity WHERE Owner.Id = \''
         +that.props.userId+'\'';
@@ -39,6 +42,7 @@ var OppList = React.createClass({
 
             that.setState({
                 dataSource: that.getDataSource(data),
+                loaded: true
             });
 
         });
@@ -49,10 +53,24 @@ var OppList = React.createClass({
     },
 
     render: function() {
+        if (!this.state.loaded) {
+          return(
+            <View style={{flex:1,
+              flexDirection:'row',
+              alignItems:'center',
+              justifyContent:'center'}}>
+              <GiftedSpinner/>
+            </View>
+          );
+        }
         return (
-            <ListView style={Styles.scene}
-              dataSource={this.state.dataSource}
-              renderRow={this.renderRow} />
+          <View style={Styles.scene}>
+            <ScrollView>
+              <ListView
+                dataSource={this.state.dataSource}
+                renderRow={this.renderRow} />
+            </ScrollView>
+          </View>
       );
     },
 

@@ -16,6 +16,7 @@ var {
 var Styles = require('./Styles.js');
 var oauth = require('./react.force.oauth');
 var forceClient = require('./react.force.net.js');
+var GiftedSpinner = require('react-native-gifted-spinner');
 
 var TaskList = React.createClass({
     getInitialState: function() {
@@ -24,11 +25,12 @@ var TaskList = React.createClass({
         overdue: ds.cloneWithRows([]),
         today: ds.cloneWithRows([]),
         future: ds.cloneWithRows([]),
-        authenticated: false
+        authenticated: false,
+        loaded: false
       };
     },
     
-    componentDidMount: function() {
+    componentWillMount: function() {
       var that = this;
       oauth.authenticate(
           function() {
@@ -60,7 +62,8 @@ var TaskList = React.createClass({
                         that.setState({
                             overdue: that.state.overdue.cloneWithRows(overdue),
                             today: that.state.today.cloneWithRows(today),
-                            future: that.state.future.cloneWithRows(future)
+                            future: that.state.future.cloneWithRows(future),
+                            loaded: true
                         });
                     }
                   );
@@ -76,6 +79,16 @@ var TaskList = React.createClass({
 
     render: function() {
       var that = this;
+      if (!that.state.loaded) {
+        return(
+          <View style={{flex:1,
+            flexDirection:'row',
+            alignItems:'center',
+            justifyContent:'center'}}>
+            <GiftedSpinner/>
+          </View>
+        );
+      }
       return (
         <View style={Styles.scene}>
           <ScrollView>
@@ -116,11 +129,11 @@ var TaskList = React.createClass({
     renderRow: function(rowData: Object) {
         return (
           <View>
-              <View style={Styles.row}>
+              <ScrollView horizontal={true} contentContainerStyle={Styles.row}>
                 <Text numberOfLines={1} style={Styles.textStyle}>
                  {rowData['Subject']}
                 </Text>
-              </View>
+              </ScrollView>
               <View style={Styles.cellBorder} />
           </View>
         );

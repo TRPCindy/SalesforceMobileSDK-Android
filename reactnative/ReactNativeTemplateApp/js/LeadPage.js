@@ -7,6 +7,7 @@ var {
   View,
   Text,
   ListView,
+  ScrollView,
   Navigator,
   TouchableHighlight,
   TouchableOpacity
@@ -15,16 +16,18 @@ var {
 var Styles = require('./Styles.js');
 var oauth = require('./react.force.oauth');
 var forceClient = require('./react.force.net.js');
+var GiftedSpinner = require('react-native-gifted-spinner');
 
 var LeadList = React.createClass({
     getInitialState: function() {
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       return {
           dataSource: ds.cloneWithRows([]),
+          loaded: false
       };
     },
     
-    componentDidMount: function() {
+    componentWillMount: function() {
       var that = this;
       var soql = 'SELECT Id, Name FROM Lead WHERE Owner.Id = \''
         +that.props.userId+'\'';
@@ -39,6 +42,7 @@ var LeadList = React.createClass({
 
             that.setState({
                 dataSource: that.getDataSource(data),
+                loaded: true
             });
 
         });
@@ -49,10 +53,24 @@ var LeadList = React.createClass({
     },
 
     render: function() {
+        if (!this.state.loaded) {
+          return(
+            <View style={{flex:1,
+              flexDirection:'row',
+              alignItems:'center',
+              justifyContent:'center'}}>
+              <GiftedSpinner/>
+            </View>
+          );
+        }
         return (
-            <ListView style={Styles.scene}
-              dataSource={this.state.dataSource}
-              renderRow={this.renderRow} />
+          <View style={Styles.scene}>
+            <ScrollView>
+              <ListView
+                dataSource={this.state.dataSource}
+                renderRow={this.renderRow} />
+            </ScrollView>
+          </View>
       );
     },
 
@@ -75,11 +93,7 @@ class LeadPage extends Component {
     return (
       <Navigator
           renderScene={(route, navigator) => this.renderScene(route, navigator)}
-          navigator={this.props.navigator}
-          navigationBar={
-            <Navigator.NavigationBar style={{backgroundColor: '#246dd5'}}
-                routeMapper={NavigationBarRouteMapper} />
-          } />
+          navigator={this.props.navigator} />
     );
   }
   renderScene(route, navigator) {
@@ -88,17 +102,5 @@ class LeadPage extends Component {
     );
   }
 }
-
-var NavigationBarRouteMapper = {
-  LeftButton(route, navigator, index, navState) {
-    return null;
-  },
-  RightButton(route, navigator, index, navState) {
-    return null;
-  },
-  Title(route, navigator, index, navState) {
-    return null;
-  }
-};
 
 module.exports = LeadPage;

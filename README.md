@@ -1,72 +1,75 @@
-[![Build Status](https://travis-ci.org/forcedotcom/SalesforceMobileSDK-Android.svg?branch=unstable)](https://travis-ci.org/forcedotcom/SalesforceMobileSDK-Android)
+# Salesforce Mobile SDK for Android Package
 
-# Salesforce.com Mobile SDK for Android
+The **forcedroid** npm package allows users to create Android mobile applications to interface with the [Salesforce Platform](http://www.salesforce.com/platform/overview/), leveraging the [Salesforce Mobile SDK for Android](https://github.com/forcedotcom/SalesforceMobileSDK-Android).
 
-You have arrived at the source repository for the Salesforce Mobile SDK for Android. Welcome! Starting with our 2.0 release, there are now two ways you can choose to work with the Mobile SDK:
+## Getting Started
 
-- If you'd like to work with the source code of the SDK itself, you've come to the right place! You can browse sample app source code and debug down through the layers to get a feel for how everything works under the covers. Read on for instructions on how to get started with the SDK in your development environment.
-- If you're just eager to start developing your own application, the quickest way is to use our npm binary distribution package, called [forcedroid](https://npmjs.org/package/forcedroid), which is hosted on [npmjs.org](https://npmjs.org/). Getting started is as simple as installing the npm package and launching your template app. You'll find more details on the forcedroid package page.
+If you're new to mobile development, or the force.com platform, you may want to start at the [Mobile SDK landing page](http://wiki.developerforce.com/page/Mobile_SDK).  This page offers a variety of resources to help you determine the best technology path for creating your app, as well as many guides and blog posts detailing how to work with the Mobile SDK.
 
-Installation (do this first - really)
-==
+But assuming you're all read up, here's how to get started with the **forcedroid** package to create the starting point for your mobile application.
 
-After cloning the SalesforceMobileSDK-Android project from github, run the install script from the command line:
+## Install the forcedroid Package
 
-`./install.sh`
+Because forcedroid is a command-line utility, we recommend installing it globally, so that it's easily accessible on your path:
 
-This pulls submodule dependencies from github.
+        sudo npm install forcedroid -g
 
-(Windows users: run `cscript install.vbs` from the command line instead.)
+You're of course welcome to install it locally as well:
 
-Introduction
-==
+        npm install forcedroid
 
-### What's New in 4.1
+In this case, you can access the forcedroid app at `[Install Directory]/node_modules/.bin/forcedroid`.
 
-**SmartStore Enhancements**
-- SmartStore now allows internal (non-leaf) nodes in index paths. This feature is useful in LIKE and MATCH queries.
-- SmartStore now allows arrays in compound index paths.
+## Using forcedroid
 
-**Library Upgrades**
-- We've updated React Native to version 0.20.
+For the rest of this document, we'll assume that `forcedroid` is on your path.
 
-**Other Technical Improvements**
-- Improvements to sample apps.
-- Various bug fixes.
+Typing `forcedroid` with no arguments gives you a breakdown of the usage:
 
-Check http://developer.force.com/mobilesdk for additional articles and tutorials.
+        $ forcedroid
+        Usage:
+        forcedroid create
+            --apptype=<Application Type> (native, hybrid_remote, hybrid_local)
+            --appname=<Application Name>
+            --targetdir=<Target App Folder>
+            --packagename=<App Package Identifier> (com.my_company.my_app)
+            --startpage=<Path to the remote start page> (/apex/MyPage — Only required/used for 'hybrid_remote')
+            [--usesmartstore=<Whether or not to use SmartStore> ('true' or 'false'. false by default)]
 
-### Native Applications
-The Salesforce Mobile SDK provides essential libraries for quickly building native mobile apps that seamlessly integrate with the Salesforce cloud architecture.  Out of the box, we provide an implementation of OAuth2, abstracting away the complexity of securely storing refresh tokens or fetching a new session ID when a session expires. The SDK also provides Java wrappers for the Salesforce REST API, making it easy to retrieve, store, and manipulate data.
+        OR
 
-### Hybrid Applications
-HTML5 is quickly emerging as dominant technology for developing cross-platform mobile applications. While developers can create sophisticated apps with HTML5 and JavaScript, some limitations remain, specifically: session management, access to the camera and address book, and the inability to distribute apps inside public App Stores. The Salesforce Mobile Container makes possible to combine the ease of web app development with power of the Android platform by wrapping a web app inside a thin native container, producing a hybrid application.
+        forcedroid version
 
-### WARNING: OAuth2 token storage on devices without encryption
-The Salesforce Mobile SDK provides PIN-based OAuth token encryption for Android devices that don't provide full storage encryption functionality.  The SDK implementation is **NOT** designed to provide complete security. It's simply offered as an option for temporarily protecting your app from eavesdroppers. Please use caution in your production deployment with sensitive data. **We strongly recommend deploying production apps on the latest generation of Android devices with build-in device encryption.**
+**Note:** You can specify any or all of the arguments as command line options as specified in the usage.  If you run `forcedroid create` with missing arguments, it prompts you for each missing option interactively.
 
-Setting up your Development Environment
-==
+Once the creation script completes, you'll have a fully functioning basic application of the type you specified.  The new application will be configured as an Eclipse project in your target directory, alongside the Mobile SDK libraries it consumes.
 
-The following steps will help you get started with your development environment, whether you choose to develop native apps or hybrid apps. See the `README` files in the `native/` and `hybrid/` folders for additional notes pertaining to development in those environments.
+### forcedroid create options
 
-1. Install the Android SDK (r23 or above) and Android Studio: http://developer.android.com/sdk/index.html
-2. Get setup on github: http://help.github.com/
+**App Type:** The type of application you wish to develop:
 
-Downloading the Salesforce SDK
-==
+- **native** — A fully native Android application
+- **hybrid\_remote** — A hybrid application, based on the [Cordova](http://cordova.apache.org/) framework, that runs in a native container.  The app contents live in the cloud as a [Visualforce](http://wiki.developerforce.com/page/An_Introduction_to_Visualforce) application
+- **hybrid\_local** — A hybrid application, based on the Cordova framework, that runs in a native container.  The app contents are developed locally in the Eclipse project, and are deployed to the device itself when the app is built
 
-To pull down the SDK from github, create a new directory and git clone the salesforce SDK repo.
-<pre>
-git clone https://github.com/forcedotcom/SalesforceMobileSDK-Android.git
-</pre>
+**App Name:** The name of your application
 
-Documentation
-==
+**Target App Folder:** The folder where you want your app to be created.  Your app will be contained in a folder underneath this folder, alongside a `forcedroid` folder containing the Mobile SDK libraries that your app is linked to.
 
-* [SalesforceSDK](http://forcedotcom.github.com/SalesforceMobileSDK-Android/index.html)
+**App Package Identifier:** The Java package identifier for your app (e.g. `com.acme.mobile_apps`).  **Note:** Your package name must be formatted as a [valid Java package name](http://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html), or you will receive an error.
 
-Discussion
-==
+**Start Page:** \( *Required for hybrid\_remote apps only* \) The starting page of your application on salesforce.com.  This is the entry point of your remote application, though it's only the path, not the server portion of the URL.  For instance, `/apex/MyVisualforceStartPage`.
 
-If you would like to make suggestions, have questions, or encounter any issues, we'd love to hear from you.  Post any feedback you have on our [Google+ Community](https://plus.google.com/communities/114225252149514546445).
+**Use SmartStore:** \( *optional* \) Whether to use SmartStore in your app.  The value is `false` by default.  Set this value to `true` if you intend to use SmartStore in your app.
+
+## More information
+
+- After your app has been created, you will see some on-screen instructions for next steps, such as building and running your app, importing the project into an Eclipse workspace, and changing the default Connected App (sample) configuration values to match your own Connected App.  Note that if you intend to work with your app in Eclipse, you are not required to go through the steps to build and run your app from the command line, and vice versa.
+
+- You can find the `forceios` npm package [here](https://npmjs.org/package/forceios), to develop Mobile SDK apps for iOS.
+
+- The Salesforce Mobile SDK for iOS source repository lives [here](https://github.com/forcedotcom/SalesforceMobileSDK-iOS).
+
+- See [our developerforce site](http://wiki.developerforce.com/page/Mobile_SDK) for more information about how you can leverage the Salesforce Mobile SDK with the force.com platform.
+
+- If you would like to make suggestions, have questions, or encounter any issues, we'd love to hear from you.  Post any feedback you have on our [Google+ Community](https://plus.google.com/communities/114225252149514546445).
