@@ -50,6 +50,11 @@ var Styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 12,
     },
+    rowNoPad: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
     rowColor: {
         flex: 1,
         alignItems: 'center',

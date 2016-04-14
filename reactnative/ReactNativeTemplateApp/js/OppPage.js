@@ -75,15 +75,24 @@ var OppList = React.createClass({
     },
 
     renderRow: function(rowData: Object) {
+        var that = this;
         return (
-                <View>
-                    <View style={Styles.row}>
-                      <Text numberOfLines={1} style={Styles.textStyle}>
-                       {rowData['Name']}
-                      </Text>
-                    </View>
-                    <View style={Styles.cellBorder} />
-                </View>
+            <View>
+                <TouchableHighlight
+                  style={Styles.row}
+                  onPress={() => {
+                    that.props.navigator.push({
+                      id: 'Opportunity',
+                      name: rowData['Name'],
+                      passProps: {oppId: rowData['Id']}
+                    })
+                  }}>
+                  <Text numberOfLines={1} style={Styles.textStyle} >
+                   {rowData['Name']}
+                  </Text>
+                </TouchableHighlight>
+                <View style={Styles.cellBorder} />
+            </View>
         );
     }
 });
@@ -98,7 +107,7 @@ class OppPage extends Component {
   }
   renderScene(route, navigator) {
     return (
-        <OppList userId={this.props.userId} />
+        <OppList navigator={this.props.navigator} userId={this.props.userId} />
     );
   }
 }

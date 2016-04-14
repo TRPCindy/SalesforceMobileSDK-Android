@@ -22,10 +22,13 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var Styles = require('./Styles.js');
 var MainPage = require('./MainPage');
+var Task = require('./Task');
 var ContactPage = require('./ContactPage');
 var Contact = require('./Contact');
 var LeadPage = require('./LeadPage');
+var Lead = require('./Lead');
 var OppPage = require('./OppPage');
+var Opportunity = require('./Opportunity');
 var MetricsPage = require('./MetricsPage');
 
 
@@ -67,9 +70,16 @@ var App = React.createClass({
     renderScene: function(route, navigator) {
       var that = this;
       var routeId = route.id;
+      console.log('Cindy');
+      console.log(routeId);
       if (routeId === 'MainPage') {
         return (
           <MainPage navigator={navigator} userName={that.state.userName} />
+        );
+      }
+      if (routeId === 'Task') {
+        return (
+          <Task navigator={navigator} taskId={route.passProps.taskId} />
         );
       }
       if (routeId === 'ContactPage') {
@@ -87,9 +97,19 @@ var App = React.createClass({
           <LeadPage navigator={navigator} userId={that.state.userId} />
         );
       }
+      if (routeId === 'Lead') {
+        return (
+          <Lead navigator={navigator} leadId={route.passProps.leadId} />
+        );
+      }
       if (routeId === 'OppPage') {
         return (
           <OppPage navigator={navigator} userId={that.state.userId} />
+        );
+      }
+      if (routeId === 'Opportunity') {
+        return (
+          <Opportunity navigator={navigator} oppId={route.passProps.oppId} />
         );
       }
       if (routeId === 'MetricsPage') {
@@ -224,7 +244,9 @@ var closeDrawer = function() {
 
 var NavigationBarRouteMapper = {
   LeftButton: function(route, navigator, index, navState) {
-    if (route !== undefined && route.id === 'Contact') {
+    if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead' 
+      || route.id === 'Opportunity' || route.id === 'Task')) {
+      
       var routes = navigator.getCurrentRoutes();
       return (
         <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}

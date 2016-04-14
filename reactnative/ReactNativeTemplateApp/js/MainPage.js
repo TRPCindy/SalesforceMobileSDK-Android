@@ -37,7 +37,7 @@ var TaskList = React.createClass({
               that.setState({authenticated:true});
               oauth.getAuthCredentials(function (resp){
                   that.setState({userId: resp['userId']});
-                  var soql = 'SELECT Subject,ActivityDate FROM Task WHERE OwnerId = \''
+                  var soql = 'SELECT Id,Subject,ActivityDate FROM Task WHERE OwnerId = \''
                     +that.state.userId+ '\' and IsClosed = false';
                   forceClient.query(soql,
                     function(response) {
@@ -127,13 +127,24 @@ var TaskList = React.createClass({
     },
 
     renderRow: function(rowData: Object) {
+      var that = this;
         return (
           <View>
-              <ScrollView horizontal={true} contentContainerStyle={Styles.row}>
-                <Text numberOfLines={1} style={Styles.textStyle}>
-                 {rowData['Subject']}
-                </Text>
-              </ScrollView>
+              <TouchableHighlight
+                style={Styles.row}
+                onPress={() => {
+                  that.props.navigator.push({
+                    id: 'Task',
+                    name: rowData['Subject'],
+                    passProps: {taskId: rowData['Id']}
+                  })
+                }}>
+                <ScrollView horizontal={true} contentContainerStyle={Styles.rowNoPad}>
+                  <Text numberOfLines={1} style={Styles.textStyle} >
+                   {rowData['Subject']}
+                  </Text>
+                </ScrollView>
+              </TouchableHighlight>
               <View style={Styles.cellBorder} />
           </View>
         );
@@ -154,7 +165,7 @@ class MainPage extends Component {
   renderScene(route, navigator) {
     var that = this;
     return(
-      <TaskList userName={that.props.userName} />
+      <TaskList navigator={that.props.navigator} userName={that.props.userName} />
       );
   }
 }

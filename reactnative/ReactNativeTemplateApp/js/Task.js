@@ -14,39 +14,40 @@ var {
 } = React;
 
 var Styles = require('./Styles.js');
-var oauth = require('./react.force.oauth');
 var forceClient = require('./react.force.net.js');
 var GiftedSpinner = require('react-native-gifted-spinner');
 
-var ContactList = React.createClass({
+var TaskInfo = React.createClass({
+  getInitialState: function() {
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    return {
+        dataSource: ds.cloneWithRows([]),
+        loaded: false
+    };
+  },
 
-    componentWillMount: function() {
-      var that = this;
-      var soql = 'SELECT Id, Name FROM Contact WHERE Owner.Id = \''
-        +that.props.userId+'\'';
-      forceClient.query(soql,
-        function(response) {
-            var contacts = response.records;
+  componentWillMount: function() {
+    var that = this;
+    var soql = 'SELECT Id,Subject,ActivityDate,Priority,Description FROM Task WHERE Id = \''
+      +that.props.taskId+'\'';
+    forceClient.query(soql,
+      function(response) {
+          if (response.records.length > 0) {
+            var fields = response.records[0];
             var data = [];
-            for (var i in contacts) {
-                data.push(contacts[i]);
+            for (var i in fields) {
+                if (typeof fields[i] !== 'object') {
+                  data.push(i+': '+fields[i]);
+                }
+                
             }
-            console.log(data);
 
             that.setState({
                 dataSource: that.getDataSource(data),
                 loaded: true
             });
-
-        });
-    },
-
-    getInitialState: function() {
-      var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      return {
-          dataSource: ds.cloneWithRows([]),
-          loaded: false
-      };
+          }
+      });
     },
 
     getDataSource: function(users: Array<any>): ListViewDataSource {
@@ -76,28 +77,21 @@ var ContactList = React.createClass({
     },
 
     renderRow: function(rowData: Object) {
-      return (
-        <View>
-            <TouchableHighlight
-              style={Styles.row}
-              onPress={() => {
-                this.props.navigator.push({
-                  id: 'Contact',
-                  name: rowData['Name'],
-                  passProps: {contactId: rowData['Id']}
-                })
-              }}>
-              <Text numberOfLines={1} style={Styles.textStyle} >
-               {rowData['Name']}
-              </Text>
-            </TouchableHighlight>
-            <View style={Styles.cellBorder} />
-        </View>
-      );
+      console.log(rowData);
+        return (
+          <View>
+              <View style={Styles.row}>
+                <Text numberOfLines={1} style={Styles.textStyle}>
+                 {rowData}
+                </Text>
+              </View>
+              <View style={Styles.cellBorder} />
+          </View>
+        );
     }
 });
 
-class ContactPage extends Component {
+class Task extends Component {
   render() {
     return (
       <Navigator
@@ -107,9 +101,9 @@ class ContactPage extends Component {
   }
   renderScene(route, navigator) {
     return (
-        <ContactList navigator={this.props.navigator} userId={this.props.userId} />
+        <TaskInfo navigator={this.props.navigator} taskId={this.props.taskId}/>
     );
   }
 }
 
-module.exports = ContactPage;
+module.exports = Task;

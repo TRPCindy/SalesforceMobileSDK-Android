@@ -89,22 +89,6 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 //     }
 // });
 
-// class MetricsPage extends Component {
-//   render() {
-//     return (
-//       <Navigator
-//           renderScene={(route, navigator) => this.renderScene(route, navigator)}
-//           navigator={this.props.navigator} />
-//     );
-//   }
-//   renderScene(route, navigator) {
-//     return (
-//       <MetricsList navigator={this.props.navigator} />
-//     );
-//   }
-// }
-
-
 class MetricsPage extends Component {
 
   constructor (props) {
@@ -180,6 +164,8 @@ class MetricsPage extends Component {
       currentIndex: index
     })
   }
+
+  //CINDY can use something like the listview renderRow so I can do as many bars as I want
 
   render () {
     const {pts, ast, reb, stl, blk, tov, min} = this.state

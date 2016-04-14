@@ -32,21 +32,22 @@ var ContactInfo = React.createClass({
       +that.props.contactId+'\'';
     forceClient.query(soql,
       function(response) {
-          var fields = response.records[0];
-          var data = [];
-          for (var i in fields) {
-              if (typeof fields[i] !== 'object') {
-                data.push(i+': '+fields[i]);
-              }
-              
-          }
-          console.log(data);
+          if (response.records.length > 0) {
+            var fields = response.records[0];
+            var data = [];
+            for (var i in fields) {
+                if (typeof fields[i] !== 'object') {
+                  data.push(i+': '+fields[i]);
+                }
+                
+            }
+            console.log(data);
 
-          that.setState({
-              dataSource: that.getDataSource(data),
-              loaded: true
-          });
-
+            that.setState({
+                dataSource: that.getDataSource(data),
+                loaded: true
+            });
+        }
       });
     },
 

@@ -75,13 +75,22 @@ var LeadList = React.createClass({
     },
 
     renderRow: function(rowData: Object) {
+        var that = this;
         return (
           <View>
-              <View style={Styles.row}>
-                <Text numberOfLines={1} style={Styles.textStyle}>
+              <TouchableHighlight
+                style={Styles.row}
+                onPress={() => {
+                  that.props.navigator.push({
+                    id: 'Lead',
+                    name: rowData['Name'],
+                    passProps: {leadId: rowData['Id']}
+                  })
+                }}>
+                <Text numberOfLines={1} style={Styles.textStyle} >
                  {rowData['Name']}
                 </Text>
-              </View>
+              </TouchableHighlight>
               <View style={Styles.cellBorder} />
           </View>
         );
@@ -98,7 +107,7 @@ class LeadPage extends Component {
   }
   renderScene(route, navigator) {
     return (
-        <LeadList userId={this.props.userId}/>
+        <LeadList navigator={this.props.navigator} userId={this.props.userId}/>
     );
   }
 }
