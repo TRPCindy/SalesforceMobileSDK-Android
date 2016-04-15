@@ -23,7 +23,8 @@ var Styles = StyleSheet.create({
         height: 50,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#246dd5'
+        backgroundColor: 'white',
+        elevation: 1
     },
     navBarText: {
         fontSize: 18,
@@ -53,14 +54,15 @@ var Styles = StyleSheet.create({
     rowNoPad: {
         flex: 1,
         alignItems: 'center',
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     rowColor: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#246dd5',
+        backgroundColor: '#cc0000',
         flexDirection: 'row',
         padding: 14,
+        elevation: 1
     },
     cellBorder: {
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
@@ -68,17 +70,11 @@ var Styles = StyleSheet.create({
         height: 1 / PixelRatio.get(),
         marginLeft: 4,
     },
-    drawerStyle: {
-        fontSize: 18,
-        color: 'black',
-        alignSelf: 'center',
-        paddingBottom: 12
-    },
     menuTitle: {
         height: 90,
         flex: 1,
         flexDirection: 'row',
-        backgroundColor: '#246dd5',
+        backgroundColor: '#cd201f',
         alignSelf: 'stretch'
     },
     menuTitleText: {
@@ -112,6 +108,11 @@ var Styles = StyleSheet.create({
         left: 4,
         bottom: 4,
         right: 16,
+    },
+    iconLeft: {
+        color: '#545454', 
+        marginLeft: 8, 
+        marginBottom: 5 
     }
 });
 

@@ -33,15 +33,8 @@ var LeadList = React.createClass({
         +that.props.userId+'\'';
       forceClient.query(soql,
         function(response) {
-            var leads = response.records;
-            var data = [];
-            for (var i in leads) {
-                data.push(leads[i]);
-            }
-            console.log(data);
-
             that.setState({
-                dataSource: that.getDataSource(data),
+                dataSource: that.getDataSource(response.records),
                 loaded: true
             });
 
@@ -83,7 +76,7 @@ var LeadList = React.createClass({
                 onPress={() => {
                   that.props.navigator.push({
                     id: 'Lead',
-                    name: rowData['Name'],
+                    name: 'Lead Details',
                     passProps: {leadId: rowData['Id']}
                   })
                 }}>

@@ -26,15 +26,8 @@ var ContactList = React.createClass({
         +that.props.userId+'\'';
       forceClient.query(soql,
         function(response) {
-            var contacts = response.records;
-            var data = [];
-            for (var i in contacts) {
-                data.push(contacts[i]);
-            }
-            console.log(data);
-
             that.setState({
-                dataSource: that.getDataSource(data),
+                dataSource: that.getDataSource(response.records),
                 loaded: true
             });
 
@@ -83,7 +76,7 @@ var ContactList = React.createClass({
               onPress={() => {
                 this.props.navigator.push({
                   id: 'Contact',
-                  name: rowData['Name'],
+                  name: 'Contact Details',
                   passProps: {contactId: rowData['Id']}
                 })
               }}>

@@ -28,7 +28,7 @@ var TaskInfo = React.createClass({
 
   componentWillMount: function() {
     var that = this;
-    var soql = 'SELECT Id,Subject,ActivityDate,Priority,Description FROM Task WHERE Id = \''
+    var soql = 'SELECT Subject,ActivityDate,Priority,Description FROM Task WHERE Id = \''
       +that.props.taskId+'\'';
     forceClient.query(soql,
       function(response) {

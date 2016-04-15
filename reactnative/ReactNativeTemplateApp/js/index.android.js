@@ -12,7 +12,8 @@ var {
     TouchableOpacity,
     Component,
     TouchableHighlight,
-    DrawerLayoutAndroid
+    DrawerLayoutAndroid,
+    Image
 } = React;
 
 var forceClient = require('./react.force.net.js');
@@ -22,6 +23,7 @@ var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var Styles = require('./Styles.js');
 var MainPage = require('./MainPage');
+var TaskPage = require('./TaskPage');
 var Task = require('./Task');
 var ContactPage = require('./ContactPage');
 var Contact = require('./Contact');
@@ -31,6 +33,7 @@ var OppPage = require('./OppPage');
 var Opportunity = require('./Opportunity');
 var MetricsPage = require('./MetricsPage');
 
+var profileUrl = '';
 
 var App = React.createClass({
 
@@ -48,13 +51,18 @@ var App = React.createClass({
                 that.setState({authenticated:true});
                 oauth.getAuthCredentials(
                   function (resp){
+                    //var accessToken = resp.accessToken;
                     that.setState({userId: resp['userId']});
-                    var soql = 'SELECT Name FROM User WHERE Id = \''
+                    var soql = 'SELECT Name,SmallPhotoUrl FROM User WHERE Id = \''
                       +that.state.userId+'\' limit 1';
                     forceClient.query(soql,
                       function(response) {
                           var user = response.records[0];
-                          that.setState({userName: user['Name']});
+                          profileUrl = user['SmallPhotoUrl'];
+                          that.setState({
+                            userName: user['Name'],
+                            profileUrl: user['SmallPhotoUrl']
+                          });
                       }
                     );
                   }, 
@@ -70,11 +78,14 @@ var App = React.createClass({
     renderScene: function(route, navigator) {
       var that = this;
       var routeId = route.id;
-      console.log('Cindy');
-      console.log(routeId);
       if (routeId === 'MainPage') {
         return (
           <MainPage navigator={navigator} userName={that.state.userName} />
+        );
+      }
+      if (routeId === 'TaskPage') {
+        return (
+          <TaskPage navigator={navigator} userId={that.state.userId} type={route.passProps.type} status={route.passProps.status} />
         );
       }
       if (routeId === 'Task') {
@@ -131,10 +142,6 @@ var App = React.createClass({
                   style={{color: 'white', marginLeft: 10, marginTop: 53}}/>
                 <Text style={Styles.menuTitleText}>Agent App</Text>
               </View>
-              <Icon.Button name="home" style={Styles.menuButton} color='#545454'
-                  onPress={this.gotoMainPage}>
-                  <Text style={Styles.menuText}>Home</Text>
-              </Icon.Button>
               <Icon.Button name="account-box" style={Styles.menuButton} color='#545454'
                   onPress={this.gotoContactPage}>
                   <Text style={Styles.menuText}>Contacts</Text>
@@ -146,10 +153,6 @@ var App = React.createClass({
               <Icon.Button name="assignment" style={Styles.menuButton} color='#545454'
                   onPress={this.gotoOppPage}>
                   <Text style={Styles.menuText}>Opportunities</Text>
-              </Icon.Button>
-              <Icon.Button name="insert-chart" style={Styles.menuButton} color='#545454'
-                  onPress={this.gotoMetricsPage}>
-                  <Text style={Styles.menuText}>Agent Metrics</Text>
               </Icon.Button>
               <View style={Styles.cellBorder} />
               <Icon.Button name="exit-to-app" style={Styles.menuButton} color='#545454'
@@ -189,14 +192,6 @@ var App = React.createClass({
         );
     },
 
-    gotoMainPage: function() {
-      global.navigator.push({
-        id: 'MainPage',
-        name: 'Home',
-      });
-      closeDrawer();
-    },
-
     gotoContactPage: function() {
       global.navigator.push({
         id: 'ContactPage',
@@ -221,14 +216,6 @@ var App = React.createClass({
       closeDrawer();
     },
 
-    gotoMetricsPage:function() {
-      global.navigator.push({
-        id: 'MetricsPage',
-        name: 'Agent Metrics',
-      });
-      closeDrawer();
-    },
-
     logout:function() {
       oauth.logout();
       closeDrawer();
@@ -245,7 +232,7 @@ var closeDrawer = function() {
 var NavigationBarRouteMapper = {
   LeftButton: function(route, navigator, index, navState) {
     if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead' 
-      || route.id === 'Opportunity' || route.id === 'Task')) {
+      || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage')) {
       
       var routes = navigator.getCurrentRoutes();
       return (
@@ -254,7 +241,7 @@ var NavigationBarRouteMapper = {
             navigator.pop()
           }}>
           <Icon name='arrow-back' size={30} 
-              style={{color: 'white', marginLeft: 10, marginBottom: 8}}/>
+              style={Styles.iconLeft}/>
         </TouchableOpacity>
       );
     }
@@ -264,22 +251,61 @@ var NavigationBarRouteMapper = {
           openDrawer()
         }}>
         <Icon name='list' size={30} 
-          style={{color: 'white', marginLeft: 10, marginBottom: 8}}/>
+          style={Styles.iconLeft}/>
       </TouchableOpacity>
     );
   },
 
   RightButton: function(route, navigator, index, navState) {
-      return null;
+      var that = this;
+      if (profileUrl === '' || route !== undefined && (route.id === 'Contact' 
+        || route.id === 'Lead' || route.id === 'Opportunity' 
+        || route.id === 'Task' || route.id === 'TaskPage')) {
+        
+        return null;
+      }
+      return(
+        <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
+          onPress={() => {
+            navigator.push({ id: 'MetricsPage', name: 'Agent Metrics' });
+          }}>
+          <Image
+            style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }}
+            source={{ uri: profileUrl }}
+          />
+        </TouchableOpacity>
+      );
   },
 
   Title: function(route, navigator, index, navState) {
-      if (route === undefined) return;
-      return (
-        <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
-          <Text style={{color: 'white', fontSize: 16}}>
-            {route.name}
-          </Text>
+      if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead' 
+        || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage')) {
+        if (route.name.length > 38) {
+          return (
+            <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
+              <Text style={{color: '#545454', fontSize: 14}}>
+                {route.name}
+              </Text>
+            </TouchableOpacity>
+          );
+        }
+        return (
+          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
+            <Text style={{color: '#545454', fontSize: 16}}>
+              {route.name}
+            </Text>
+          </TouchableOpacity>
+        );
+      }
+      return(
+        <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
+          onPress={() => {
+            navigator.push({ id: 'MainPage', name: 'Home' });
+          }}>
+          <Image
+            style={{ height:30, width: 124, marginLeft: 42 }}
+            source={require('../res/trp-logo.png')}
+          />
         </TouchableOpacity>
       );
   },

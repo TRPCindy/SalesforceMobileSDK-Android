@@ -28,7 +28,7 @@ var ContactInfo = React.createClass({
 
   componentWillMount: function() {
     var that = this;
-    var soql = 'SELECT Id,Name,Email FROM Contact WHERE Id = \''
+    var soql = 'SELECT Name,Email,Phone FROM Contact WHERE Id = \''
       +that.props.contactId+'\'';
     forceClient.query(soql,
       function(response) {

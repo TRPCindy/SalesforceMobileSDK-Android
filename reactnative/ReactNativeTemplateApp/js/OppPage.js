@@ -33,15 +33,8 @@ var OppList = React.createClass({
         +that.props.userId+'\'';
       forceClient.query(soql,
         function(response) {
-            var opps = response.records;
-            var data = [];
-            for (var i in opps) {
-                data.push(opps[i]);
-            }
-            console.log(data);
-
             that.setState({
-                dataSource: that.getDataSource(data),
+                dataSource: that.getDataSource(response.records),
                 loaded: true
             });
 
@@ -83,7 +76,7 @@ var OppList = React.createClass({
                   onPress={() => {
                     that.props.navigator.push({
                       id: 'Opportunity',
-                      name: rowData['Name'],
+                      name: 'Opportunity Details',
                       passProps: {oppId: rowData['Id']}
                     })
                   }}>

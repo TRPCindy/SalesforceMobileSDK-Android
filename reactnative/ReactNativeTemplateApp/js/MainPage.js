@@ -22,9 +22,9 @@ var TaskList = React.createClass({
     getInitialState: function() {
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       return {
-        overdue: ds.cloneWithRows([]),
-        today: ds.cloneWithRows([]),
-        future: ds.cloneWithRows([]),
+        overdueSummary: ds.cloneWithRows([]),
+        todaySummary: ds.cloneWithRows([]),
+        futureSummary: ds.cloneWithRows([]),
         authenticated: false,
         loaded: false
       };
@@ -37,32 +37,73 @@ var TaskList = React.createClass({
               that.setState({authenticated:true});
               oauth.getAuthCredentials(function (resp){
                   that.setState({userId: resp['userId']});
-                  var soql = 'SELECT Id,Subject,ActivityDate FROM Task WHERE OwnerId = \''
-                    +that.state.userId+ '\' and IsClosed = false';
+                  var typesOverdue = {};
+                  var typesToday = {};
+                  var typesFuture = {};
+                  var soql = 'SELECT Id,Type,Subject,ActivityDate FROM Task WHERE OwnerId = \''
+                    +that.state.userId+ '\' and IsClosed = false and ActivityDate != null';
                   forceClient.query(soql,
                     function(response) {
                         var todayStart = new Date();
                         todayStart.setHours(0,0,0,0);
                         var todayEnd = new Date();
                         todayEnd.setHours(23,59,59,999);
-                        console.log(today);
-                        var overdue = [];
-                        var today = [];
-                        var future = [];
+                        console.log(todayStart);
                         response.records.forEach(function(item) {
-                          var taskDate = new Date(item['ActivityDate']);
+                          var curType = item['Type'];
+                          var curDate = item['ActivityDate'];
+                          var month = parseInt(curDate.substring(5,7))-1;
+                          var taskDate = new Date(curDate.substring(0,4),
+                            month, curDate.substring(8,10));
+
                           if (taskDate < todayStart) {
-                            overdue.push(item);
+                            if (typesOverdue.hasOwnProperty(curType)) {
+                              typesOverdue[curType]++;
+                            } else {
+                              typesOverdue[curType] = 1;
+                            }
                           } else if (taskDate > todayEnd) {
-                            future.push(item);
+                            if (typesFuture.hasOwnProperty(curType)) {
+                              typesFuture[curType]++;
+                            } else {
+                              typesFuture[curType] = 1;
+                            }
                           } else {
-                            today.push(item);
+                            if (typesToday.hasOwnProperty(curType)) {
+                              typesToday[curType]++;
+                            } else {
+                              typesToday[curType] = 1;
+                            }
                           }
                         });
+                        var overdueSummary = [];
+                        var todaySummary = [];
+                        var futureSummary = [];
+                        for (var cur in typesOverdue) {
+                          var obj = {};
+                          obj.type = cur;
+                          obj.count = typesOverdue[cur];
+                          obj.status = 'Overdue Tasks';
+                          overdueSummary.push(obj);
+                        }
+                        for (var cur in typesToday) {
+                          var obj = {};
+                          obj.type = cur;
+                          obj.count = typesToday[cur];
+                          obj.status = 'Due Today';
+                          todaySummary.push(obj);
+                        }
+                        for (var cur in typesFuture) {
+                          var obj = {};
+                          obj.type = cur;
+                          obj.count = typesFuture[cur];
+                          obj.status = 'Due Later';
+                          futureSummary.push(obj);
+                        }
                         that.setState({
-                            overdue: that.state.overdue.cloneWithRows(overdue),
-                            today: that.state.today.cloneWithRows(today),
-                            future: that.state.future.cloneWithRows(future),
+                            overdueSummary: that.state.overdueSummary.cloneWithRows(overdueSummary),
+                            todaySummary: that.state.todaySummary.cloneWithRows(todaySummary),
+                            futureSummary: that.state.futureSummary.cloneWithRows(futureSummary),
                             loaded: true
                         });
                     }
@@ -89,6 +130,7 @@ var TaskList = React.createClass({
           </View>
         );
       }
+
       return (
         <View style={Styles.scene}>
           <ScrollView>
@@ -103,7 +145,7 @@ var TaskList = React.createClass({
               </Text>
             </View>
             <ListView style={{flex: 1}}
-                dataSource={that.state.overdue}
+                dataSource={that.state.overdueSummary}
                 renderRow={this.renderRow} />
             <View style={Styles.rowColor}>
               <Text numberOfLines={1} style={{color:'white'}}>
@@ -111,7 +153,7 @@ var TaskList = React.createClass({
               </Text>
             </View>
             <ListView style={{flex: 1}}
-                dataSource={that.state.today}
+                dataSource={that.state.todaySummary}
                 renderRow={this.renderRow} />
             <View style={Styles.rowColor}>
               <Text numberOfLines={1} style={{color:'white'}}>
@@ -119,7 +161,7 @@ var TaskList = React.createClass({
               </Text>
             </View>
             <ListView style={{flex: 1}}
-                dataSource={that.state.future}
+                dataSource={that.state.futureSummary}
                 renderRow={this.renderRow} />
           </ScrollView>
         </View>
@@ -127,21 +169,21 @@ var TaskList = React.createClass({
     },
 
     renderRow: function(rowData: Object) {
-      var that = this;
+        var that = this;
         return (
           <View>
               <TouchableHighlight
                 style={Styles.row}
                 onPress={() => {
                   that.props.navigator.push({
-                    id: 'Task',
-                    name: rowData['Subject'],
-                    passProps: {taskId: rowData['Id']}
+                    id: 'TaskPage',
+                    name: rowData['status'] + ' - ' + rowData['type'],
+                    passProps: {type: rowData['type'], status: rowData['status']}
                   })
                 }}>
                 <ScrollView horizontal={true} contentContainerStyle={Styles.rowNoPad}>
                   <Text numberOfLines={1} style={Styles.textStyle} >
-                   {rowData['Subject']}
+                   {rowData['type']}: {rowData['count']}
                   </Text>
                 </ScrollView>
               </TouchableHighlight>
@@ -161,7 +203,6 @@ class MainPage extends Component {
     );
   }
 
-  // CINDY: have a red flag beside Priority tasks
   renderScene(route, navigator) {
     var that = this;
     return(
