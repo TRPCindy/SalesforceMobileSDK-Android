@@ -32,6 +32,7 @@ var LeadPage = require('./LeadPage');
 var Lead = require('./Lead');
 var OppPage = require('./OppPage');
 var Opportunity = require('./Opportunity');
+var CreateNote = require('./CreateNote');
 var MetricsPage = require('./MetricsPage');
 
 var profileUrl = '';
@@ -133,11 +134,16 @@ var App = React.createClass({
           <Opportunity navigator={navigator} oppId={route.passProps.oppId} />
         );
       }
-      if (routeId === 'MetricsPage') {
-        var curDat = [{date:'2016-04-13','pts':1, 'ast':2, 'reb':3, 'stl':4, 'blk':5, 'tov':6, 'min':7},
-          {date:'2016-04-12','pts':9, 'ast':2, 'reb':6, 'stl':4, 'blk':5, 'tov':6, 'min':5}];
+      if (routeId === 'CreateNote') {
         return (
-          <MetricsPage navigator={navigator} userId={that.state.userId} data={curDat} />
+          <CreateNote navigator={navigator} relatedId={route.passProps.relatedId} />
+        );
+      }
+      if (routeId === 'MetricsPage') {
+        //var curDat = [{date:'2016-04-13','pts':1, 'ast':2, 'reb':3, 'stl':4, 'blk':5, 'tov':6, 'min':7},
+        //  {date:'2016-04-12','pts':9, 'ast':2, 'reb':6, 'stl':4, 'blk':5, 'tov':6, 'min':5}];
+        return (
+          <MetricsPage navigator={navigator} userId={that.state.userId}/>
         );
       }
     },

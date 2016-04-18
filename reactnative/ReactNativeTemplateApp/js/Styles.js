@@ -23,6 +23,7 @@ var Styles = StyleSheet.create({
     logo: {
         height:30,
         width: 124,
+        position: 'relative',
         marginLeft: 42/360 * WIDTH
     },
     textStyle: {
