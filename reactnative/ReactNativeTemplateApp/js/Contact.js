@@ -16,6 +16,7 @@ var {
 var Styles = require('./Styles.js');
 var forceClient = require('./react.force.net.js');
 var GiftedSpinner = require('react-native-gifted-spinner');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var ContactInfo = React.createClass({
   getInitialState: function() {
@@ -39,7 +40,7 @@ var ContactInfo = React.createClass({
                 if (typeof fields[i] !== 'object') {
                   data.push(i+': '+fields[i]);
                 }
-                
+
             }
             console.log(data);
 
@@ -79,16 +80,53 @@ var ContactInfo = React.createClass({
 
     renderRow: function(rowData: Object) {
       console.log(rowData);
-        return (
-          <View>
-              <View style={Styles.row}>
-                <Text numberOfLines={1} style={Styles.textStyle}>
-                 {rowData}
-                </Text>
+        if (rowData.substring(0,5) === 'Name:') {
+            return (
+              <View>
+                  <View style={Styles.row}>
+                    <Icon name='person' size={25} style={Styles.listViewIcon}/>
+                    <Text numberOfLines={1} style={Styles.textStyle}>
+                     {rowData.substring(6)};
+                    </Text>
+                  </View>
+                  <View style={Styles.cellBorder} />
               </View>
-              <View style={Styles.cellBorder} />
-          </View>
-        );
+            );
+        } else if (rowData.substring(0,5) === 'Email') {
+            return (
+              <View>
+                  <View style={Styles.row}>
+                    <Icon name='email' size={25} style={Styles.listViewIcon}/>
+                    <Text numberOfLines={1} style={Styles.textStyle}>
+                     {rowData.substring(7)}
+                    </Text>
+                  </View>
+                  <View style={Styles.cellBorder} />
+              </View>
+            );
+        } else if (rowData.substring(0,5) === 'Phone') {
+            return (
+              <View>
+                  <View style={Styles.row}>
+                    <Icon name='phone' size={25} style={Styles.listViewIcon}/>
+                    <Text numberOfLines={1} style={Styles.textStyle}>
+                     {rowData.substring(7)}
+                    </Text>
+                  </View>
+                  <View style={Styles.cellBorder} />
+              </View>
+            );
+        } else {
+            return (
+              <View>
+                  <View style={Styles.row}>
+                    <Text numberOfLines={1} style={Styles.textStyle}>
+                    </Text>
+                  </View>
+                  <View style={Styles.cellBorder} />
+              </View>
+            );
+        }
     }
 });
 

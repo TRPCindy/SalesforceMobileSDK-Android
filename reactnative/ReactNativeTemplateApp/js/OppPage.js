@@ -17,6 +17,7 @@ var Styles = require('./Styles.js');
 var oauth = require('./react.force.oauth');
 var forceClient = require('./react.force.net.js');
 var GiftedSpinner = require('react-native-gifted-spinner');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var OppList = React.createClass({
     getInitialState: function() {
@@ -26,7 +27,7 @@ var OppList = React.createClass({
           loaded: false
       };
     },
-    
+
     componentWillMount: function() {
       var that = this;
       var soql = 'SELECT Id, Name FROM Opportunity WHERE Owner.Id = \''
@@ -80,9 +81,12 @@ var OppList = React.createClass({
                       passProps: {oppId: rowData['Id']}
                     })
                   }}>
-                  <Text numberOfLines={1} style={Styles.textStyle} >
-                   {rowData['Name']}
-                  </Text>
+                  <View style={Styles.flowRight}>
+                      <Text numberOfLines={1} style={Styles.textStyle} >
+                       {rowData['Name']}
+                      </Text>
+                      <Icon name='keyboard-arrow-right' size={25} />
+                  </View>
                 </TouchableHighlight>
                 <View style={Styles.cellBorder} />
             </View>
