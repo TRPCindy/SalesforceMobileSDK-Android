@@ -18,16 +18,23 @@ const WIDTH = Dimensions.get('window').width;
 
 var Styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: 'white',
     },
     logo: {
-        height:30,
-        width: 124,
-        position: 'relative',
-        marginLeft: 42/360 * WIDTH
+        //flex: 1,
+        //height: WIDTH/5,
+        width: WIDTH/3,
+        marginLeft: 42/360 * WIDTH,
+        resizeMode: 'contain'
+        //justifyContent: 'center',
+        //alignSelf: 'center',
     },
     textStyle: {
-        color: '#545454'
+        color: '#545454',
+        flex: 1,
+        flexDirection: 'row',
+        fontFamily: 'sans-serif-thin'
     },
     navBar: {
         height: 50,
@@ -49,6 +56,18 @@ var Styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems:'center',
         margin: 2,
+    },
+    navBarTitle: {
+        marginLeft: 42/360 * WIDTH,
+        color: '#545454',
+        fontSize: 16,
+        textAlign: 'center'
+    },
+    navBarTitleLarge: {
+        marginLeft: 42/360 * WIDTH,
+        color: '#545454',
+        fontSize: 14,
+        textAlign: 'center'
     },
     scene: {
         flex: 1,
@@ -92,7 +111,8 @@ var Styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 50,
         marginLeft: 50,
-        color: 'white'
+        color: 'white',
+        fontFamily: 'sans-serif-thin'
     },
     menuButton: {
         height: 50,
@@ -104,7 +124,8 @@ var Styles = StyleSheet.create({
     menuText: {
         fontSize: 16,
         marginLeft: 40,
-        color: '#545454'
+        color: '#545454',
+        fontFamily: 'sans-serif-thin'
     },
     chartContainer: {
         flex: 1,
@@ -120,9 +141,18 @@ var Styles = StyleSheet.create({
         right: 16,
     },
     iconLeft: {
-        color: '#545454', 
-        marginLeft: 8, 
-        marginBottom: 5 
+        color: '#545454',
+        marginLeft: 8,
+        marginBottom: 5
+    },
+    flowRight: {
+        flexDirection: 'row',
+        alignSelf: 'stretch',
+        justifyContent: 'space-between',
+        flex: 1
+    },
+    listViewIcon: {
+        marginRight: 15
     }
 });
 

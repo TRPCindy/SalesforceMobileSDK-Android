@@ -67,7 +67,7 @@ var App = React.createClass({
                           });
                       }
                     );
-                  }, 
+                  },
                   function (resp) {}
                 );
             },
@@ -154,7 +154,7 @@ var App = React.createClass({
           <View style={{flex: 1, backgroundColor: '#fff'}}>
             <View>
               <View style={Styles.menuTitle}>
-                <Icon name='phone-android' size={18} 
+                <Icon name='phone-android' size={18}
                   style={{color: 'white', marginLeft: 10, marginTop: 53}}/>
                 <Text style={Styles.menuTitleText}>Agent App</Text>
               </View>
@@ -188,7 +188,7 @@ var App = React.createClass({
                 ref={(navigator) => global.navigator = navigator}
                 style={Styles.container}
                 initialRoute={{
-                  id: 'MainPage', 
+                  id: 'MainPage',
                   name: 'Home'
                 }}
                 renderScene={(route, navigator) => this.renderScene(route, navigator)}
@@ -247,16 +247,16 @@ var closeDrawer = function() {
 
 var NavigationBarRouteMapper = {
   LeftButton: function(route, navigator, index, navState) {
-    if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead' 
+    if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead'
       || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage')) {
-      
+
       var routes = navigator.getCurrentRoutes();
       return (
         <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
           onPress={() => {
             navigator.pop()
           }}>
-          <Icon name='arrow-back' size={30} 
+          <Icon name='keyboard-arrow-left' size={30}
               style={Styles.iconLeft}/>
         </TouchableOpacity>
       );
@@ -266,7 +266,7 @@ var NavigationBarRouteMapper = {
         onPress={() => {
           openDrawer()
         }}>
-        <Icon name='list' size={30} 
+        <Icon name='list' size={30}
           style={Styles.iconLeft}/>
       </TouchableOpacity>
     );
@@ -274,10 +274,10 @@ var NavigationBarRouteMapper = {
 
   RightButton: function(route, navigator, index, navState) {
       var that = this;
-      if (profileUrl === '' || route !== undefined && (route.id === 'Contact' 
-        || route.id === 'Lead' || route.id === 'Opportunity' 
+      if (profileUrl === '' || route !== undefined && (route.id === 'Contact'
+        || route.id === 'Lead' || route.id === 'Opportunity'
         || route.id === 'Task' || route.id === 'TaskPage')) {
-        
+
         return null;
       }
       return(
@@ -294,12 +294,12 @@ var NavigationBarRouteMapper = {
   },
 
   Title: function(route, navigator, index, navState) {
-      if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead' 
+      if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead'
         || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage')) {
         if (route.name.length > 38) {
           return (
             <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
-              <Text style={{color: '#545454', fontSize: 14}}>
+              <Text style={Styles.navBarTitleLarge}>
                 {route.name}
               </Text>
             </TouchableOpacity>
@@ -307,7 +307,7 @@ var NavigationBarRouteMapper = {
         }
         return (
           <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
-            <Text style={{color: '#545454', fontSize: 16}}>
+            <Text style={Styles.navBarTitle}>
               {route.name}
             </Text>
           </TouchableOpacity>

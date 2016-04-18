@@ -29,7 +29,7 @@ var TaskList = React.createClass({
         loaded: false
       };
     },
-    
+
     componentWillMount: function() {
       var that = this;
       oauth.authenticate(
@@ -135,32 +135,32 @@ var TaskList = React.createClass({
         <View style={Styles.scene}>
           <ScrollView>
             <View style={Styles.row}>
-              <Text numberOfLines={1} style={Styles.textStyle}>
+              <Text numberOfLines={1} style={{color: '#545454', fontWeight: '100', fontSize: 16}}>
                 Welcome {that.props.userName}!
               </Text>
             </View>
             <View style={Styles.rowColor}>
-              <Text numberOfLines={1} style={{color:'white'}}>
+              <Text numberOfLines={1} style={{color:'white', fontWeight: '300', fontSize: 16}}>
                 Overdue Tasks
               </Text>
             </View>
-            <ListView style={{flex: 1}}
+            <ListView style={{flex: 1, paddingHorizontal: 12}}
                 dataSource={that.state.overdueSummary}
                 renderRow={this.renderRow} />
             <View style={Styles.rowColor}>
-              <Text numberOfLines={1} style={{color:'white'}}>
+              <Text numberOfLines={1} style={{color:'white', fontWeight: '300', fontSize: 16}}>
                 Due Today
               </Text>
             </View>
-            <ListView style={{flex: 1}}
+            <ListView style={{flex: 1, paddingHorizontal: 12}}
                 dataSource={that.state.todaySummary}
                 renderRow={this.renderRow} />
             <View style={Styles.rowColor}>
-              <Text numberOfLines={1} style={{color:'white'}}>
+              <Text numberOfLines={1} style={{color:'white', fontWeight: '300', fontSize: 16}}>
                 Due Later
               </Text>
             </View>
-            <ListView style={{flex: 1}}
+            <ListView style={{flex: 1, paddingHorizontal: 12}}
                 dataSource={that.state.futureSummary}
                 renderRow={this.renderRow} />
           </ScrollView>
