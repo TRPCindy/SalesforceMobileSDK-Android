@@ -11,10 +11,19 @@ var {
     Component
 } = React;
 
+import Dimensions from 'Dimensions';
+
+const HEIGHT = Dimensions.get('window').height;
+const WIDTH = Dimensions.get('window').width;
 
 var Styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
+    },
+    logo: {
+        height:30,
+        width: 124,
+        marginLeft: 42/360 * WIDTH
     },
     textStyle: {
         color: '#545454'

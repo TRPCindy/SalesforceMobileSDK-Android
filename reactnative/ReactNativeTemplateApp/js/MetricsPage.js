@@ -24,68 +24,113 @@ var forceClient = require('./react.force.net.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var MetricsList = React.createClass({
-    getInitialState: function() {
-      var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      return {
-          dataSource: ds.cloneWithRows([]),
-      };
-    },
     
     componentDidMount: function() {
       var that = this;
-      var soql = 'SELECT StageName, ' +
-        'Elapsed_Transaction_Signed_Time__c, ' +
-        'Net_Revenue__c ' +
-        'FROM Opportunity ' +
-        'WHERE trp_opp_Transaction_Property_Type__c != \'Rental Provider\' ' +
-        'AND trp_opp_Transaction_Property_Type__c != \'Rental Seeker\' ' +
-        'AND trp_opp_Transaction_Property_Type__c != \'Mortgage\' ' +
-        'AND Type != \'Mortgage\' AND Type != \'Rental Provider\' AND Type != \'Rental Seeker\' ' +
-        'AND LeadSource != \'Referral - Agent\' AND Account.AcquisitionSource__pc != \'Referral - Agent\' ' +
-        'AND Owner.Name = \''+that.props.userId+'\'';
-      forceClient.query(soql,
+      var soqlTotal = 'SELECT count() from Opportunity where Owner.Id =\''+
+        that.props.userId + '\'';
+      forceClient.query(soqlTotal,
         function(response) {
-            var opps = response.records;
-            var data = [];
-            for (var i in opps) {
-                data.push(opps[i]);
-            }
-            console.log(data);
+            that.setState({
+                numTotal: response.totalSize
+            });
+
+            var soqlApproved = 'SELECT count() from Opportunity where trp_opp_Agent_Approved_Date_Time_O__c != null and Owner.Id =\''+
+              that.props.userId + '\'';
+            forceClient.query(soqlApproved,
+              function(response) {
+                  var convApproved = 0;
+                  if (that.state.numTotal !== null && that.state.numTotal !== 0) {
+                    convApproved = 100 * response.totalSize / that.state.numTotal;
+                    convApproved = Math.round(convApproved * 100) / 100
+                  }
+
+                  that.setState({
+                      numApproved: response.totalSize,
+                      convApproved: convApproved
+                  });
+
+                  var soqlTouring = 'SELECT count() from Opportunity where trp_opp_Touring_Date_Time_O__c != null and Owner.Id =\''+
+                    that.props.userId + '\'';
+                  forceClient.query(soqlTouring,
+                    function(response) {
+                        var convTouring = 0;
+                        if (that.state.numApproved !== null && that.state.numApproved !== 0) {
+                          convTouring = 100 * response.totalSize / that.state.numApproved;
+                          convTouring = Math.round(convTouring * 100) / 100
+                        }
+
+                        that.setState({
+                            numTouring: response.totalSize,
+                            convTouring: convTouring
+                        });
+
+                        var soqlClose = 'SELECT count() from Opportunity where trp_opp_Transaction_Signed_Date__c != null AND Owner.Id =\''+
+                          that.props.userId + '\'';
+                        forceClient.query(soqlClose,
+                          function(response) {
+                              var convClosed = 0;
+                              if (that.state.numTouring !== null && that.state.numTouring !== 0) {
+                                convClosed = 100 * response.totalSize / that.state.numTouring;
+                                convClosed = Math.round(convClosed * 100) / 100
+                              }
+
+                              that.setState({
+                                  numClosed: response.totalSize,
+                                  convClosed: convClosed
+                              });
+
+                    });
+
+              });
+
+              });
+
+        });
+      var soqlCurTouring = 'SELECT count() from Opportunity where StageName = \'Touring\' '+
+        'AND trp_opp_Transaction_Property_Type__c NOT IN (\'Seller - Resale\', \'Seller - Assignment\','+
+        '\'Seller - TRP One\', \'Rental Provider\', \'Rental Seeker\', \'Mortgage\') AND Owner.Id =\''+
+        that.props.userId + '\'';
+      forceClient.query(soqlCurTouring,
+        function(response) {
 
             that.setState({
-                dataSource: that.getDataSource(data),
+                numCurTouring: response.totalSize
             });
 
         });
-    },
-
-    getDataSource: function(users: Array<any>): ListViewDataSource {
-        return this.state.dataSource.cloneWithRows(users);
+      var soqlCommission = 'SELECT sum(Commission_Paid_To_Agent__c) from Opportunity where Owner.Id =\''+
+        that.props.userId + '\' and Commission_Paid_To_Agent__c != null';
+      forceClient.query(soqlCommission,
+        function(response) {
+            console.log(response.records[0].expr0);
+            var commission = 0;
+            if (response.records[0].expr0 !== null) {
+              commission = response.records[0].expr0;
+            }
+            that.setState({
+                commission: commission
+            });
+        });
     },
 
     render: function() {
+        var that = this;
+        if (that.state === null) return null;
         return (
           <View style={Styles.scene}>
             <ScrollView>
-              <ListView
-                dataSource={this.state.dataSource}
-                renderRow={this.renderRow} />
+              <Text style={Styles.textStyle}>Currently Touring: {that.state.numCurTouring}</Text>
+              <Text style={Styles.textStyle}>Total Approved: {that.state.numApproved}</Text>
+              <Text style={Styles.textStyle}>Approved Conversion Rate: {that.state.convApproved} %</Text>
+              <Text style={Styles.textStyle}>Total Touring: {that.state.numTouring}</Text>
+              <Text style={Styles.textStyle}>Touring Conversion Rate: {that.state.convTouring} %</Text>
+              <Text style={Styles.textStyle}>Total Closed: {that.state.numClosed}</Text>
+              <Text style={Styles.textStyle}>Closed Conversion Rate: {that.state.convClosed} %</Text>
+              <Text style={Styles.textStyle}>Commission Paid To Agent: $ {that.state.commission}</Text>
             </ScrollView>
           </View>
       );
-    },
-
-    renderRow: function(rowData: Object) {
-        return (
-          <View>
-              <View style={Styles.row}>
-                <Text numberOfLines={1} style={Styles.textStyle}>
-                 {rowData['Name']}
-                </Text>
-              </View>
-              <View style={Styles.cellBorder} />
-          </View>
-        );
     }
 });
 

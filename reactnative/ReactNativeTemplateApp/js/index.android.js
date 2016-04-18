@@ -13,7 +13,8 @@ var {
     Component,
     TouchableHighlight,
     DrawerLayoutAndroid,
-    Image
+    Image,
+    BackAndroid
 } = React;
 
 var forceClient = require('./react.force.net.js');
@@ -73,6 +74,15 @@ var App = React.createClass({
                 console.log('Failed to authenticate:' + error);
             }
         );
+
+        BackAndroid.addEventListener('hardwareBackPress', function() {
+          if(navigator.getCurrentRoutes().length > 1) {
+            global.navigator.pop();
+          } else {
+            BackAndroid.exitApp();
+          }
+          return true;
+        });
     },
 
     renderScene: function(route, navigator) {
@@ -303,7 +313,7 @@ var NavigationBarRouteMapper = {
             navigator.push({ id: 'MainPage', name: 'Home' });
           }}>
           <Image
-            style={{ height:30, width: 124, marginLeft: 42 }}
+            style={Styles.logo}
             source={require('../res/trp-logo.png')}
           />
         </TouchableOpacity>
