@@ -25,7 +25,8 @@ var NoteInfo = React.createClass({
     return {
         title: '',
         body: '',
-        loaded: false
+        loaded: false,
+        editable: false
     };
   },
 
@@ -85,6 +86,7 @@ var NoteInfo = React.createClass({
     makeEditable(value) {
       this.refs['textInput1'].setNativeProps({editable: value});
       this.refs['textInput2'].setNativeProps({editable: value});
+      this.setState({editable: value});
     },
 
     render: function() {
