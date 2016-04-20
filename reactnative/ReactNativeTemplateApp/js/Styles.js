@@ -22,12 +22,13 @@ var Styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     logo: {
-        //flex: 1,
-        //height: WIDTH/5,
+        flex: 1,
+        //height: HEIGHT,
         width: WIDTH/3,
-        marginLeft: 42/360 * WIDTH,
-        resizeMode: 'contain'
-        //justifyContent: 'center',
+        //marginLeft: 42/360 * WIDTH,
+        marginLeft: WIDTH/3 - 145/2,
+        resizeMode: 'contain',
+        justifyContent: 'center',
         //alignSelf: 'center',
     },
     textStyle: {
@@ -85,6 +86,12 @@ var Styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
     },
+    rowHorizontalPad: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        paddingHorizontal: 12
+    },
     rowColor: {
         flex: 1,
         alignItems: 'center',
@@ -100,7 +107,7 @@ var Styles = StyleSheet.create({
         marginLeft: 4,
     },
     menuTitle: {
-        height: 90,
+        height: 50,
         flex: 1,
         flexDirection: 'row',
         backgroundColor: '#cd201f',
@@ -153,6 +160,11 @@ var Styles = StyleSheet.create({
     },
     listViewIcon: {
         marginRight: 15
+    },
+    listViewImageIcon: {
+        marginRight: 15,
+        width: 25,
+        height: 25
     }
 });
 

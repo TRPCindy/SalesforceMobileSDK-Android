@@ -121,6 +121,7 @@ var ContactInfo = React.createClass({
               <View>
                   <View style={Styles.row}>
                     <Text numberOfLines={1} style={Styles.textStyle}>
+                        {rowData}
                     </Text>
                   </View>
                   <View style={Styles.cellBorder} />

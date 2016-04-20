@@ -144,7 +144,7 @@ var TaskList = React.createClass({
                 Overdue Tasks
               </Text>
             </View>
-            <ListView style={{flex: 1, paddingHorizontal: 12}}
+            <ListView style={{flex: 1}}
                 dataSource={that.state.overdueSummary}
                 renderRow={this.renderRow} />
             <View style={Styles.rowColor}>
@@ -152,7 +152,7 @@ var TaskList = React.createClass({
                 Due Today
               </Text>
             </View>
-            <ListView style={{flex: 1, paddingHorizontal: 12}}
+            <ListView style={{flex: 1}}
                 dataSource={that.state.todaySummary}
                 renderRow={this.renderRow} />
             <View style={Styles.rowColor}>
@@ -160,7 +160,7 @@ var TaskList = React.createClass({
                 Due Later
               </Text>
             </View>
-            <ListView style={{flex: 1, paddingHorizontal: 12}}
+            <ListView style={{flex: 1}}
                 dataSource={that.state.futureSummary}
                 renderRow={this.renderRow} />
           </ScrollView>
@@ -181,7 +181,7 @@ var TaskList = React.createClass({
                     passProps: {type: rowData['type'], status: rowData['status']}
                   })
                 }}>
-                <ScrollView horizontal={true} contentContainerStyle={Styles.rowNoPad}>
+                <ScrollView horizontal={true} contentContainerStyle={Styles.rowHorizontalPad}>
                   <Text numberOfLines={1} style={Styles.textStyle} >
                    {rowData['type']}: {rowData['count']}
                   </Text>
