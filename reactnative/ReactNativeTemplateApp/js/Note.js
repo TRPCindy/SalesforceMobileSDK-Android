@@ -59,10 +59,10 @@ var NoteInfo = React.createClass({
       var that = this;
       that.makeEditable(false);
       forceClient.update('Note', that.props.noteId,
-        { Title: that.state.title, Body: that.state.body }, 
+        { Title: that.state.title, Body: that.state.body },
         function(resp) {
           console.log(resp);
-        }, 
+        },
         function(resp) {}
       );
     },
@@ -70,14 +70,14 @@ var NoteInfo = React.createClass({
     deleteNote: function() {
       var that = this;
       console.log('Cindy');
-      forceClient.del('Note', that.props.noteId, 
+      forceClient.del('Note', that.props.noteId,
         function(resp) {
           console.log(resp);
           that.props.navigator.push({
-            id: 'NotePage', 
-            name: 'Notes', 
+            id: 'NotePage',
+            name: 'Notes',
             passProps: { relatedId: that.props.relatedId }});
-        }, 
+        },
         function(resp) {}
       );
     },
@@ -117,6 +117,7 @@ var NoteInfo = React.createClass({
                 <TextInput
                   style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'black'}}
                   ref={'textInput1'}
+                  editable={false}
                   defaultValue={that.state.title}
                   onChangeText={(text) => that.setState({title: text})}
                   value={that.state.title}
@@ -133,7 +134,7 @@ var NoteInfo = React.createClass({
                   value={that.state.body}
                 />
                 <View style={Styles.cellBorder} />
-                <TouchableHighlight style={{flex: 1, justifyContent: 'center'}} 
+                <TouchableHighlight style={{flex: 1, justifyContent: 'center'}}
                   onPress={that.updateNote}>
                   <Text>Update</Text>
                 </TouchableHighlight>
