@@ -16,6 +16,7 @@ var {
 var Styles = require('./Styles.js');
 var forceClient = require('./react.force.net.js');
 var GiftedSpinner = require('react-native-gifted-spinner');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var TaskInfo = React.createClass({
   getInitialState: function() {
@@ -39,7 +40,7 @@ var TaskInfo = React.createClass({
                 if (typeof fields[i] !== 'object') {
                   data.push(i+': '+fields[i]);
                 }
-                
+
             }
 
             that.setState({
@@ -77,17 +78,66 @@ var TaskInfo = React.createClass({
     },
 
     renderRow: function(rowData: Object) {
-      console.log(rowData);
-        return (
-          <View>
-              <View style={Styles.row}>
-                <Text numberOfLines={1} style={Styles.textStyle}>
-                 {rowData}
-                </Text>
+        if (rowData.substring(0,7) === 'Subject') {
+            return (
+              <View>
+                  <View style={Styles.row}>
+                    <Icon name='subject' size={25} style={Styles.listViewIcon}/>
+                    <Text numberOfLines={1} style={Styles.textStyle}>
+                     {rowData.substring(9)}
+                    </Text>
+                  </View>
+                  <View style={Styles.cellBorder} />
               </View>
-              <View style={Styles.cellBorder} />
-          </View>
-        );
+            );
+        } else if (rowData.substring(0,12) === 'ActivityDate') {
+            return (
+              <View>
+                  <View style={Styles.row}>
+                    <Icon name='date-range' size={25} style={Styles.listViewIcon}/>
+                    <Text numberOfLines={1} style={Styles.textStyle}>
+                     {rowData.substring(14)}
+                    </Text>
+                  </View>
+                  <View style={Styles.cellBorder} />
+              </View>
+            );
+        } else if (rowData.substring(0,8) === 'Priority') {
+            return (
+              <View>
+                  <View style={Styles.row}>
+                    <Icon name='priority-high' size={25} style={Styles.listViewIcon}/>
+                    <Text numberOfLines={1} style={Styles.textStyle}>
+                     {rowData.substring(10)}
+                    </Text>
+                  </View>
+                  <View style={Styles.cellBorder} />
+              </View>
+            );
+        } else if (rowData.substring(0,11) === 'Description') {
+            return (
+              <View>
+                  <View style={Styles.row}>
+                    <Icon name='description' size={25} style={Styles.listViewIcon}/>
+                    <Text numberOfLines={1} style={Styles.textStyle}>
+                     {rowData.substring(13)}
+                    </Text>
+                  </View>
+                  <View style={Styles.cellBorder} />
+              </View>
+            );
+        } else {
+            return (
+              <View>
+                  <View style={Styles.row}>
+                    <Text numberOfLines={1} style={Styles.textStyle}>
+                        {rowData}
+                    </Text>
+                  </View>
+                  <View style={Styles.cellBorder} />
+              </View>
+            );
+        }
     }
 });
 

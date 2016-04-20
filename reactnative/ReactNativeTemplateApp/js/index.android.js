@@ -155,7 +155,7 @@ var App = React.createClass({
         //var curDat = [{date:'2016-04-13','pts':1, 'ast':2, 'reb':3, 'stl':4, 'blk':5, 'tov':6, 'min':7},
         //  {date:'2016-04-12','pts':9, 'ast':2, 'reb':6, 'stl':4, 'blk':5, 'tov':6, 'min':5}];
         return (
-          <MetricsPage navigator={navigator} userId={that.state.userId}/>
+          <MetricsPage navigator={navigator} userId={that.state.userId} userName={that.state.userName} profileUrl={that.state.profileUrl} />
         );
       }
     },
@@ -165,7 +165,15 @@ var App = React.createClass({
         var navigationView = (
           <View style={{flex: 1, backgroundColor: '#fff'}}>
             <View>
-              <View style={Styles.menuTitle}/>
+              <View style={Styles.menuTitle}>
+                  <TouchableOpacity style={{flex: 1, justifyContent: 'center', paddingLeft: 4, paddingTop: 8}}
+                    onPress={() => {
+                      closeDrawer()
+                    }}>
+                    <Icon name='list' size={30}
+                      style={Styles.iconLeft}/>
+                  </TouchableOpacity>
+              </View>
               <Icon.Button name="account-box" style={Styles.menuButton} color='#545454'
                   onPress={this.gotoContactPage}>
                   <Text style={Styles.menuText}>Contacts</Text>
@@ -204,7 +212,7 @@ var App = React.createClass({
                   if (route.sceneConfig) {
                     return route.sceneConfig;
                   }
-                  return Navigator.SceneConfigs.FadeAndroid;
+                  return Navigator.SceneConfigs.HorizontalSwipeJump;
                 }}
                 navigationBar={
                     <Navigator.NavigationBar
@@ -248,10 +256,10 @@ var App = React.createClass({
 
 var openDrawer =function() {
     global.drawer.openDrawer();
-  }
+}
 var closeDrawer = function() {
     global.drawer.closeDrawer();
-  }
+}
 
 var NavigationBarRouteMapper = {
   LeftButton: function(route, navigator, index, navState) {
@@ -289,7 +297,19 @@ var NavigationBarRouteMapper = {
         || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
 
         return null;
-      }
+    } else if (route !== undefined && route.id === 'MetricsPage') {
+        return(
+          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
+            onPress={() => {
+              navigator.pop();
+            }}>
+            <Image
+              style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }}
+              source={{ uri: profileUrl }}
+            />
+          </TouchableOpacity>
+        );
+    } else {
       return(
         <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
           onPress={() => {
@@ -301,6 +321,7 @@ var NavigationBarRouteMapper = {
           />
         </TouchableOpacity>
       );
+    }
   },
 
   Title: function(route, navigator, index, navState) {
@@ -309,7 +330,7 @@ var NavigationBarRouteMapper = {
         || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
         if (route.name.length > 38) {
           return (
-            <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
+            <TouchableOpacity style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
               <Text style={Styles.navBarTitleLarge}>
                 {route.name}
               </Text>
@@ -317,11 +338,21 @@ var NavigationBarRouteMapper = {
           );
         }
         return (
-          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
+          <TouchableOpacity style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <Text style={Styles.navBarTitle}>
               {route.name}
             </Text>
           </TouchableOpacity>
+        );
+      }
+      if (route !== undefined && route.id === 'MainPage') {
+        return(
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <Image
+              style={Styles.logo}
+              source={require('../res/trp-logo.png')}
+            />
+          </View>
         );
       }
       return(

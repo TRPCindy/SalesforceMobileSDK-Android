@@ -37,6 +37,13 @@ var Styles = StyleSheet.create({
         flexDirection: 'row',
         fontFamily: 'sans-serif-thin'
     },
+    textStyleRight: {
+        color: '#545454',
+        flex: 1,
+        flexDirection: 'row',
+        fontFamily: 'sans-serif-thin',
+        //justifyContent: 'flex-end'
+    },
     navBar: {
         height: 50,
         flexDirection: 'row',
@@ -59,16 +66,16 @@ var Styles = StyleSheet.create({
         margin: 2,
     },
     navBarTitle: {
-        marginLeft: 42/360 * WIDTH,
+        //marginLeft: 42/360 * WIDTH,
         color: '#545454',
         fontSize: 16,
-        textAlign: 'center'
+        //textAlign: 'left'
     },
     navBarTitleLarge: {
-        marginLeft: 42/360 * WIDTH,
+        //marginLeft: 42/360 * WIDTH,
         color: '#545454',
-        fontSize: 14,
-        textAlign: 'center'
+        fontSize: 12,
+        //textAlign: 'left'
     },
     scene: {
         flex: 1,
@@ -86,11 +93,25 @@ var Styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
     },
+    rowLessPad: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        padding: 4,
+        paddingLeft: 12
+    },
     rowHorizontalPad: {
         flex: 1,
         alignItems: 'center',
         flexDirection: 'row',
         paddingHorizontal: 12
+    },
+    rowLeftPad: {
+        flex: 1,
+        alignItems: 'center',
+        flexDirection: 'row',
+        padding: 4,
+        paddingLeft: 26
     },
     rowColor: {
         flex: 1,
@@ -158,6 +179,10 @@ var Styles = StyleSheet.create({
         justifyContent: 'space-between',
         flex: 1
     },
+    flowTop: {
+        flexDirection: 'row',
+        flex: 1
+    },
     listViewIcon: {
         marginRight: 15
     },
@@ -165,6 +190,13 @@ var Styles = StyleSheet.create({
         marginRight: 15,
         width: 25,
         height: 25
+    },
+    profilePic: {
+        height: 100,
+        width: 50,
+        marginTop: 8,
+        marginLeft: 8,
+        flex: 1
     }
 });
 
