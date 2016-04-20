@@ -22,13 +22,14 @@ var Styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     logo: {
-        //flex: 1,
-        //height: WIDTH/5,
-        width: WIDTH/3,
-        marginLeft: 42/360 * WIDTH,
-        resizeMode: 'contain'
-        //justifyContent: 'center',
-        //alignSelf: 'center',
+        flex: 1,
+        //height: HEIGHT,
+        width: WIDTH/3,
+        //marginLeft: 42/360 * WIDTH,
+        marginLeft: WIDTH/3 - 145/2,
+        resizeMode: 'contain',
+        justifyContent: 'center',
+        //alignSelf: 'center',
     },
     textStyle: {
         color: '#545454',

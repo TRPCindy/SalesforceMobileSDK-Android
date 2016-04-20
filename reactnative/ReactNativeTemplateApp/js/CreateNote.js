@@ -27,22 +27,45 @@ var Note = React.createClass({
       };
     },
 
+    postNote: function() {
+      var that = this;
+      console.log('Cindy');
+      console.log(that.props.relatedId);
+      console.log(that.state.title);
+      console.log(that.state.body);
+      forceClient.create('Note', 
+        { ParentId: that.props.relatedId, Title: that.state.title, Body: that.state.body }, 
+        function(resp) {
+          console.log(resp);
+        }, 
+        function(resp) {}
+      );
+    },
+
     render: function() {
       var that = this;
       return (
-        <View style={Styles.row}>
-          <Text tyle={Styles.textStyle}>Title</Text>
+        <View style={Styles.scene}>
+          <Text >Title</Text>
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-            onChangeText={(text) => that.setState({text})}
-            value={that.state.title}
+            style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'black'}}
+            ref="title"
+            autoFocus={true}
+            onChangeText={(text) => this.setState({title: text})}
+            value={this.state.title}
+            onEndEditing={(text) => {that.refs.body.focus()}}
           />
-          <Text style={Styles.textStyle}>Body</Text>
+          <Text >Body</Text>
           <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-            onChangeText={(text) => that.setState({text})}
-            value={that.state.body}
+            style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'black'}}
+            ref="body"
+            onChangeText={(text) => this.setState({body: text})}
+            value={this.state.body}
           />
+          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}} 
+            onPress={that.postNote}>
+            <Text>Submit</Text>
+          </TouchableOpacity>
         </View>
       );
     }
@@ -59,7 +82,7 @@ class CreateNote extends Component {
   renderScene(route, navigator) {
     var relatedId = this.props.relatedId;
     return (
-      <Note navigator={this.props.navigator} leadId={this.props.relatedId} />
+      <Note navigator={this.props.navigator} relatedId={this.props.relatedId} />
     );
   }
 }
