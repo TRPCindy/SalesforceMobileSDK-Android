@@ -13,7 +13,8 @@ var {
   TouchableOpacity,
   Animated,
   PropTypes,
-  Dimensions
+  Dimensions,
+  Image
 } = React;
 
 
@@ -24,7 +25,7 @@ var forceClient = require('./react.force.net.js');
 var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var MetricsList = React.createClass({
-    
+
     componentDidMount: function() {
       var that = this;
       var soqlTotal = 'SELECT count() from Opportunity where Owner.Id =\''+
@@ -120,14 +121,52 @@ var MetricsList = React.createClass({
         return (
           <View style={Styles.scene}>
             <ScrollView>
-              <Text style={Styles.textStyle}>Currently Touring: {that.state.numCurTouring}</Text>
-              <Text style={Styles.textStyle}>Total Approved: {that.state.numApproved}</Text>
-              <Text style={Styles.textStyle}>Approved Conversion Rate: {that.state.convApproved} %</Text>
-              <Text style={Styles.textStyle}>Total Touring: {that.state.numTouring}</Text>
-              <Text style={Styles.textStyle}>Touring Conversion Rate: {that.state.convTouring} %</Text>
-              <Text style={Styles.textStyle}>Total Closed: {that.state.numClosed}</Text>
-              <Text style={Styles.textStyle}>Closed Conversion Rate: {that.state.convClosed} %</Text>
-              <Text style={Styles.textStyle}>Commission Paid To Agent: $ {that.state.commission}</Text>
+              <View style={Styles.flowTop}>
+                  <Image
+                    style={Styles.profilePic}
+                    source={{ uri: that.props.profileUrl }}
+                  />
+                  <Text style={{marginTop: 8, marginLeft: 8, color: '#545454', fontWeight: '100', fontSize: 24, flex: 2 }}>
+                    {that.props.userName}
+                  </Text>
+              </View>
+              <View style={Styles.rowLessPad}>
+                <Text style={Styles.textStyle}>Currently Touring:</Text>
+                <Text style={Styles.textStyleRight}>{that.state.numCurTouring}</Text>
+              </View>
+              <View style={Styles.rowLessPad}>
+                <Text style={Styles.textStyle}>Total Agent Approved:</Text>
+                <Text style={Styles.textStyleRight}>{that.state.numApproved}</Text>
+              </View>
+              <View style={Styles.rowLessPad}>
+                  <Text style={Styles.textStyle}>Total Touring:</Text>
+                  <Text style={Styles.textStyleRight}>{that.state.numTouring}</Text>
+              </View>
+              <View style={Styles.rowLessPad}>
+                  <Text style={Styles.textStyle}>Total Closed:</Text>
+                  <Text style={Styles.textStyleRight}>{that.state.numClosed}</Text>
+              </View>
+              <View style={Styles.rowLessPad}>
+                  <Text style={Styles.textStyle}>Commission Paid To Agent:</Text>
+                  <Text style={Styles.textStyleRight}>{that.state.commission}</Text>
+              </View>
+              <View style={Styles.rowLessPad}>
+                  <Text style={{fontSize: 16}}>
+                      Conversion Rates (from previous stage):
+                  </Text>
+              </View>
+              <View style={Styles.rowLeftPad}>
+                  <Text style={Styles.textStyle}>Agent Approved:</Text>
+                  <Text style={Styles.textStyleRight}>{that.state.convApproved}%</Text>
+              </View>
+              <View style={Styles.rowLeftPad}>
+                  <Text style={Styles.textStyle}>Touring:</Text>
+                  <Text style={Styles.textStyleRight}>{that.state.convTouring} %</Text>
+              </View>
+              <View style={Styles.rowLeftPad}>
+                  <Text style={Styles.textStyle}>Closed:</Text>
+                  <Text style={Styles.textStyleRight}>{that.state.convClosed} %</Text>
+              </View>
             </ScrollView>
           </View>
       );
@@ -144,7 +183,7 @@ class MetricsPage extends Component {
   }
   renderScene(route, navigator) {
     return (
-        <MetricsList navigator={this.props.navigator} userId={this.props.userId}/>
+        <MetricsList navigator={this.props.navigator} userId={this.props.userId} userName={this.props.userName} profileUrl={this.props.profileUrl}/>
     );
   }
 
