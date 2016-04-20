@@ -40,7 +40,6 @@ var LeadInfo = React.createClass({
                 if (typeof fields[i] !== 'object') {
                   data.push(i+': '+fields[i]);
                 }
-
             }
 
             that.setState({
@@ -72,13 +71,17 @@ var LeadInfo = React.createClass({
               <ListView
                 dataSource={this.state.dataSource}
                 renderRow={this.renderRow} />
-              <TouchableOpacity style={{flex: 1, justifyContent: 'center'}} 
-                onPress={() => {
-                  this.props.navigator.push({ id: 'CreateNote', name: 'New Note', 
-                    passProps: { relatedId: this.props.leadId }})
-                }}>
-                <Text>Create</Text>
-              </TouchableOpacity>
+              <View>
+                  <TouchableOpacity style={Styles.row} 
+                    onPress={() => {
+                      this.props.navigator.push({ id: 'NotePage', 
+                        name: 'Notes', 
+                        passProps: { relatedId: this.props.leadId }})
+                    }}>
+                    <Text >Notes</Text>
+                  </TouchableOpacity>
+                  <View style={Styles.cellBorder} />
+              </View>
             </ScrollView>
           </View>
       );

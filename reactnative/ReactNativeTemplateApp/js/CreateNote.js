@@ -29,14 +29,14 @@ var Note = React.createClass({
 
     postNote: function() {
       var that = this;
-      console.log('Cindy');
-      console.log(that.props.relatedId);
-      console.log(that.state.title);
-      console.log(that.state.body);
       forceClient.create('Note', 
         { ParentId: that.props.relatedId, Title: that.state.title, Body: that.state.body }, 
         function(resp) {
           console.log(resp);
+          that.props.navigator.push({
+            id: 'NotePage', 
+            name: 'Notes', 
+            passProps: { relatedId: that.props.relatedId }});
         }, 
         function(resp) {}
       );

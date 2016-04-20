@@ -32,6 +32,8 @@ var LeadPage = require('./LeadPage');
 var Lead = require('./Lead');
 var OppPage = require('./OppPage');
 var Opportunity = require('./Opportunity');
+var NotePage = require('./NotePage');
+var Note = require('./Note');
 var CreateNote = require('./CreateNote');
 var MetricsPage = require('./MetricsPage');
 
@@ -132,6 +134,16 @@ var App = React.createClass({
       if (routeId === 'Opportunity') {
         return (
           <Opportunity navigator={navigator} oppId={route.passProps.oppId} />
+        );
+      }
+      if (routeId === 'NotePage') {
+        return (
+          <NotePage navigator={navigator} relatedId={route.passProps.relatedId} />
+        );
+      }
+      if (routeId === 'Note') {
+        return (
+          <Note navigator={navigator} noteId={route.passProps.noteId} relatedId={route.passProps.relatedId} />
         );
       }
       if (routeId === 'CreateNote') {
@@ -244,7 +256,8 @@ var closeDrawer = function() {
 var NavigationBarRouteMapper = {
   LeftButton: function(route, navigator, index, navState) {
     if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead'
-      || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage')) {
+      || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage'
+      || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
 
       var routes = navigator.getCurrentRoutes();
       return (
@@ -272,7 +285,8 @@ var NavigationBarRouteMapper = {
       var that = this;
       if (profileUrl === '' || route !== undefined && (route.id === 'Contact'
         || route.id === 'Lead' || route.id === 'Opportunity'
-        || route.id === 'Task' || route.id === 'TaskPage')) {
+        || route.id === 'Task' || route.id === 'TaskPage'
+        || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
 
         return null;
       }
@@ -291,7 +305,8 @@ var NavigationBarRouteMapper = {
 
   Title: function(route, navigator, index, navState) {
       if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead'
-        || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage')) {
+        || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage'
+        || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
         if (route.name.length > 38) {
           return (
             <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
