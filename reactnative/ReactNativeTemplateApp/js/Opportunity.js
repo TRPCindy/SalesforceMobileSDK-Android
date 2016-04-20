@@ -10,12 +10,14 @@ var {
   ScrollView,
   Navigator,
   TouchableHighlight,
-  TouchableOpacity
+  TouchableOpacity,
+  Image
 } = React;
 
 var Styles = require('./Styles.js');
 var forceClient = require('./react.force.net.js');
 var GiftedSpinner = require('react-native-gifted-spinner');
+var Icon = require('react-native-vector-icons/MaterialIcons');
 
 var OppInfo = React.createClass({
   getInitialState: function() {
@@ -39,7 +41,7 @@ var OppInfo = React.createClass({
                 if (typeof fields[i] !== 'object') {
                   data.push(i+': '+fields[i]);
                 }
-                
+
             }
 
             that.setState({
@@ -78,16 +80,83 @@ var OppInfo = React.createClass({
 
     renderRow: function(rowData: Object) {
       console.log(rowData);
-        return (
-          <View>
-              <View style={Styles.row}>
-                <Text numberOfLines={1} style={Styles.textStyle}>
-                 {rowData}
-                </Text>
-              </View>
-              <View style={Styles.cellBorder} />
-          </View>
-        );
+      if (rowData.substring(0,3) === 'Id:') {
+          return null;
+      } else if (rowData.substring(0,5) === 'Name:') {
+          return (
+            <View>
+                <View style={Styles.row}>
+                  <Icon name='person' size={25} style={Styles.listViewIcon}/>
+                  <Text numberOfLines={1} style={Styles.textStyle}>
+                   {rowData.substring(6)}
+                  </Text>
+                </View>
+                <View style={Styles.cellBorder} />
+            </View>
+          );
+      } else if (rowData.substring(0,5) === 'Type:') {
+          return (
+            <View>
+                <View style={Styles.row}>
+                  <Icon name='business' size={25} style={Styles.listViewIcon}/>
+                  <Text numberOfLines={1} style={Styles.textStyle}>
+                   {rowData.substring(6)}
+                  </Text>
+                </View>
+                <View style={Styles.cellBorder} />
+            </View>
+          );
+      } else if (rowData.substring(0,10) === 'LeadSource') {
+          return (
+            <View>
+                <View style={Styles.row}>
+                  <Icon name='web' size={25} style={Styles.listViewIcon}/>
+                  <Text numberOfLines={1} style={Styles.textStyle}>
+                   {rowData.substring(12)}
+                  </Text>
+                </View>
+                <View style={Styles.cellBorder} />
+            </View>
+          );
+      } else if (rowData.substring(0,9) === 'StageName') {
+          return (
+            <View>
+                <View style={Styles.row}>
+                  <Icon name='timeline' size={25} style={Styles.listViewIcon}/>
+                  <Text numberOfLines={1} style={Styles.textStyle}>
+                   {rowData.substring(11)}
+                  </Text>
+                </View>
+                <View style={Styles.cellBorder} />
+            </View>
+          );
+      } else if (rowData.substring(0,11) === 'Probability') {
+          return (
+            <View>
+                <View style={Styles.row}>
+                  <Image
+                    style={Styles.listViewImageIcon}
+                    source={require('../res/probability.png')}
+                  />
+                  <Text numberOfLines={1} style={Styles.textStyle}>
+                   {rowData.substring(13)}%
+                  </Text>
+                </View>
+                <View style={Styles.cellBorder} />
+            </View>
+          );
+      } else {
+          return (
+            <View>
+                <View style={Styles.row}>
+                  <Text numberOfLines={1} style={Styles.textStyle}>
+                      {rowData}
+                  </Text>
+                </View>
+                <View style={Styles.cellBorder} />
+            </View>
+          );
+      }
     }
 });
 
