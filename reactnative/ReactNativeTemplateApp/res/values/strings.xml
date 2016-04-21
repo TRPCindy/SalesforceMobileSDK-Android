@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="account_type">com.salesforce.samples.reactnativetemplateapp.login</string>
-	<string name="app_name"><b>ReactNativeTemplate</b></string>
-	<string name="app_package">com.salesforce.samples.reactnativetemplateapp</string>
+    <string name="account_type">com.theredpin.agentapp.login</string>
+	<string name="app_name"><b>AgentApp</b></string>
+	<string name="app_package">com.theredpin.agentapp</string>
 </resources>

@@ -6,7 +6,7 @@
 	android:versionName="1.0"
 	android:installLocation="internalOnly">
 
-	<application android:icon="@drawable/sf__icon"
+	<application android:icon="@mipmap/ic_launcher"
 	    android:label="@string/app_name"
 		android:name=".ReactNativeTemplateApp"
 		android:manageSpaceActivity="com.salesforce.androidsdk.ui.ManageSpaceActivity">

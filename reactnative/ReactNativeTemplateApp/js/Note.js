@@ -63,6 +63,10 @@ var NoteInfo = React.createClass({
         { Title: that.state.title, Body: that.state.body }, 
         function(resp) {
           console.log(resp);
+          that.props.navigator.push({
+            id: 'NotePage', 
+            name: 'Notes', 
+            passProps: { relatedId: that.props.relatedId }});
         }, 
         function(resp) {}
       );
@@ -70,7 +74,6 @@ var NoteInfo = React.createClass({
 
     deleteNote: function() {
       var that = this;
-      console.log('Cindy');
       forceClient.del('Note', that.props.noteId, 
         function(resp) {
           console.log(resp);
@@ -123,7 +126,6 @@ var NoteInfo = React.createClass({
                   defaultValue={that.state.title}
                   onChangeText={(text) => that.setState({title: text})}
                   value={that.state.title}
-                  onEndEditing={(text) => {that.refs.textInput2.focus()}}
                 />
                 <View style={Styles.cellBorder} />
                 <Text >Body</Text>

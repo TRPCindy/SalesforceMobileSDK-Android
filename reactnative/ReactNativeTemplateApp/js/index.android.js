@@ -57,7 +57,7 @@ var App = React.createClass({
                   function (resp){
                     //var accessToken = resp.accessToken;
                     that.setState({userId: resp['userId']});
-                    var soql = 'SELECT Name,SmallPhotoUrl FROM User WHERE Id = \''
+                    var soql = 'SELECT Name,SmallPhotoUrl,FullPhotoUrl FROM User WHERE Id = \''
                       +that.state.userId+'\' limit 1';
                     forceClient.query(soql,
                       function(response) {
@@ -65,7 +65,8 @@ var App = React.createClass({
                           profileUrl = user['SmallPhotoUrl'];
                           that.setState({
                             userName: user['Name'],
-                            profileUrl: user['SmallPhotoUrl']
+                            profileUrl: user['SmallPhotoUrl'],
+                            fullProfileUrl: user['FullPhotoUrl']
                           });
                       }
                     );
@@ -79,10 +80,23 @@ var App = React.createClass({
         );
 
         BackAndroid.addEventListener('hardwareBackPress', function() {
-          if(navigator.getCurrentRoutes().length > 1) {
-            global.navigator.pop();
-          } else {
+          var routes = navigator.getCurrentRoutes();
+          if (routes.length < 2) {
             BackAndroid.exitApp();
+          }
+          if (routes[routes.length - 2].id === 'CreateNote' || routes[routes.length - 2].id === 'Note') {
+            var destRoute = routes[routes.length - 3];
+            for (var i = (routes.length-3); i > 0; --i) {
+              destRoute = routes[i];
+              if (destRoute.id === 'NotePage') {
+                --i;
+                destRoute = routes[i];
+                if (destRoute.id !== 'CreateNote' && destRoute.id !== 'Note') break;
+              }
+            }
+            navigator.popToRoute(destRoute);
+          } else if (routes.length > 1) {
+            navigator.pop();
           }
           return true;
         });
@@ -155,7 +169,7 @@ var App = React.createClass({
         //var curDat = [{date:'2016-04-13','pts':1, 'ast':2, 'reb':3, 'stl':4, 'blk':5, 'tov':6, 'min':7},
         //  {date:'2016-04-12','pts':9, 'ast':2, 'reb':6, 'stl':4, 'blk':5, 'tov':6, 'min':5}];
         return (
-          <MetricsPage navigator={navigator} userId={that.state.userId} userName={that.state.userName} profileUrl={that.state.profileUrl} />
+          <MetricsPage navigator={navigator} userId={that.state.userId} userName={that.state.userName} profileUrl={that.state.fullProfileUrl} />
         );
       }
     },
@@ -266,8 +280,28 @@ var NavigationBarRouteMapper = {
     if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead'
       || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage'
       || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
-
+      
       var routes = navigator.getCurrentRoutes();
+      if (routes[routes.length - 2].id === 'CreateNote' || routes[routes.length - 2].id === 'Note') {
+        var destRoute = routes[routes.length - 3];
+        for (var i = (routes.length-3); i > 0; --i) {
+          destRoute = routes[i];
+          if (destRoute.id === 'NotePage') {
+            --i;
+            destRoute = routes[i];
+            if (destRoute.id !== 'CreateNote' && destRoute.id !== 'Note') break;
+          }
+        }
+        return (
+          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
+            onPress={() => {
+              navigator.popToRoute(destRoute)
+            }}>
+            <Icon name='keyboard-arrow-left' size={30}
+                style={Styles.iconLeft}/>
+          </TouchableOpacity>
+        );
+      }
       return (
         <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
           onPress={() => {

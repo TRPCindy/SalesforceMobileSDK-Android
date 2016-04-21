@@ -17,6 +17,7 @@ var {
 var Styles = require('./Styles.js');
 var forceClient = require('./react.force.net.js');
 var GiftedSpinner = require('react-native-gifted-spinner');
+var dismissKeyboard = require('dismissKeyboard');
 
 var Note = React.createClass({
 
@@ -29,6 +30,7 @@ var Note = React.createClass({
 
     postNote: function() {
       var that = this;
+      dismissKeyboard();
       forceClient.create('Note', 
         { ParentId: that.props.relatedId, Title: that.state.title, Body: that.state.body }, 
         function(resp) {

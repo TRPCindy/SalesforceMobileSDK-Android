@@ -73,6 +73,17 @@ var ContactInfo = React.createClass({
               <ListView
                 dataSource={this.state.dataSource}
                 renderRow={this.renderRow} />
+              <View>
+                  <TouchableOpacity style={Styles.row} 
+                    onPress={() => {
+                      this.props.navigator.push({ id: 'NotePage', 
+                        name: 'Notes', 
+                        passProps: { relatedId: this.props.contactId }})
+                    }}>
+                    <Text >Notes</Text>
+                  </TouchableOpacity>
+                  <View style={Styles.cellBorder} />
+              </View>
             </ScrollView>
           </View>
       );
