@@ -63,8 +63,8 @@ var NoteInfo = React.createClass({
         { Title: that.state.title, Body: that.state.body },
         function(resp) {
           that.props.navigator.push({
-            id: 'NotePage', 
-            name: 'Notes', 
+            id: 'NotePage',
+            name: 'Notes',
             passProps: { relatedId: that.props.relatedId }});
         },
         function(resp) {}
@@ -109,41 +109,51 @@ var NoteInfo = React.createClass({
                 <ScrollView>
                     <View style={{flex: 1, flexDirection: 'row'}}>
                         <TouchableOpacity
-                          style={{flex: 1}}
+                          style={{flex: 1, flexDirection: 'row', padding: 8}}
                           onPress={() => {
                             that.makeEditable(false)
                           }}>
-                          <Icon name='mode-edit' size={25} />
+                          <Icon name='mode-edit' size={30} style={{paddingRight: 8}}/>
+                          <Text style={{fontSize: 14, alignSelf: 'center'}}>Toggle Edit</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
+                          style={{padding: 8}}
                           onPress={that.deleteNote}>
-                          <Icon name='delete' size={25} />
+                          <Icon name='delete' size={30} />
                         </TouchableOpacity>
                     </View>
-                    <Text >Title</Text>
-                    <TextInput
-                      style={{height: 40, borderWidth: 0, color:'blue'}}
-                      ref={'textInput1'}
-                      editable={true}
-                      defaultValue={that.state.title}
-                      onChangeText={(text) => that.setState({title: text})}
-                      value={that.state.title}
-                    />
-                    <View style={Styles.cellBorder} />
-                    <Text>Body</Text>
-                    <TextInput
-                      style={{height: 40, borderWidth: 0, color:'blue'}}
-                      ref={'textInput2'}
-                      editable={true}
-                      defaultValue={that.state.body}
-                      onChangeText={(text) => that.setState({body: text})}
-                      value={that.state.body}
-                    />
-                    <View style={Styles.cellBorder} />
-                    <TouchableHighlight style={{flex: 1, justifyContent: 'center'}}
-                      onPress={that.updateNote}>
-                      <Text>Update</Text>
-                    </TouchableHighlight>
+                    <View style={Styles.paddingFour}>
+                        <Text style={Styles.noteTitle}>Title</Text>
+                    </View>
+                    <View style={{paddingHorizontal: 4}}>
+                        <TextInput
+                          style={Styles.noteInputBlue}
+                          ref={'textInput1'}
+                          editable={true}
+                          defaultValue={that.state.title}
+                          onChangeText={(text) => that.setState({title: text})}
+                          value={that.state.title}
+                        />
+                    </View>
+                    <View style={Styles.paddingFour}>
+                        <Text style={Styles.noteTitle}>Body</Text>
+                    </View>
+                    <View style={{paddingHorizontal: 4}}>
+                        <TextInput
+                          style={Styles.noteInputBlue}
+                          ref={'textInput2'}
+                          editable={true}
+                          defaultValue={that.state.body}
+                          onChangeText={(text) => that.setState({body: text})}
+                          value={that.state.body}
+                        />
+                    </View>
+                    <View style={Styles.paddingFour}>
+                        <TouchableHighlight style={Styles.noteButton}
+                          onPress={that.updateNote}>
+                          <Text style={{fontSize: 18, color: 'white', alignSelf: 'center'}}>Update</Text>
+                        </TouchableHighlight>
+                    </View>
                 </ScrollView>
               </View>
           );
@@ -153,42 +163,52 @@ var NoteInfo = React.createClass({
               <ScrollView>
                   <View style={{flex: 1, flexDirection: 'row'}}>
                       <TouchableOpacity
-                        style={{flex: 1}}
+                        style={{flex: 1, flexDirection: 'row', padding: 8}}
                         onPress={() => {
                           that.makeEditable(true),
                           that.refs.textInput1.focus()
                         }}>
-                        <Icon name='mode-edit' size={25} />
+                        <Icon name='mode-edit' size={30} style={{paddingRight: 8}}/>
+                        <Text style={{fontSize: 14, alignSelf: 'center'}}>Toggle Edit</Text>
                       </TouchableOpacity>
                       <TouchableOpacity
+                        style={{padding: 8}}
                         onPress={that.deleteNote}>
-                        <Icon name='delete' size={25} />
+                        <Icon name='delete' size={30} />
                       </TouchableOpacity>
                   </View>
-                  <Text >Title</Text>
-                  <TextInput
-                    style={{height: 40, color:'black'}}
-                    ref={'textInput1'}
-                    editable={false}
-                    defaultValue={that.state.title}
-                    onChangeText={(text) => that.setState({title: text})}
-                    value={that.state.title}
-                  />
-                  <View style={Styles.cellBorder} />
-                  <Text>Body</Text>
-                  <TextInput
-                    style={{height: 40, color:'black'}}
-                    ref={'textInput2'}
-                    editable={false}
-                    defaultValue={that.state.body}
-                    onChangeText={(text) => that.setState({body: text})}
-                    value={that.state.body}
-                  />
-                  <View style={Styles.cellBorder} />
-                  <TouchableHighlight style={{flex: 1, justifyContent: 'center'}}
-                    onPress={that.updateNote}>
-                    <Text>Update</Text>
-                  </TouchableHighlight>
+                  <View style={Styles.paddingFour}>
+                    <Text style={Styles.noteTitle}>Title</Text>
+                  </View>
+                  <View style={{paddingHorizontal: 4}}>
+                      <TextInput
+                        style={Styles.noteInputBlack}
+                        ref={'textInput1'}
+                        editable={false}
+                        defaultValue={that.state.title}
+                        onChangeText={(text) => that.setState({title: text})}
+                        value={that.state.title}
+                      />
+                  </View>
+                  <View style={Styles.paddingFour}>
+                    <Text style={Styles.noteTitle}>Body</Text>
+                  </View>
+                  <View style={{paddingHorizontal: 4}}>
+                      <TextInput
+                        style={Styles.noteInputBlack}
+                        ref={'textInput2'}
+                        editable={false}
+                        defaultValue={that.state.body}
+                        onChangeText={(text) => that.setState({body: text})}
+                        value={that.state.body}
+                      />
+                  </View>
+                  <View style={Styles.paddingFour}>
+                      <TouchableHighlight style={Styles.noteButton}
+                        onPress={that.updateNote}>
+                        <Text style={{fontSize: 18, color: 'white', alignSelf: 'center'}}>Update</Text>
+                      </TouchableHighlight>
+                  </View>
               </ScrollView>
             </View>
         );

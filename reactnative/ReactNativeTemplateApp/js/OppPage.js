@@ -72,7 +72,7 @@ var OppList = React.createClass({
         var that = this;
         return (
             <View>
-                <TouchableHighlight
+                <TouchableOpacity
                   style={Styles.row}
                   onPress={() => {
                     that.props.navigator.push({
@@ -87,7 +87,7 @@ var OppList = React.createClass({
                       </Text>
                       <Icon name='keyboard-arrow-right' size={25} />
                   </View>
-                </TouchableHighlight>
+                </TouchableOpacity>
                 <View style={Styles.cellBorder} />
             </View>
         );

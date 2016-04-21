@@ -32,35 +32,35 @@ class MenuPage extends Component {
 
         <Text style={Styles.drawerStyle}>Menu</Text>
 
-        <TouchableHighlight
+        <TouchableOpacity
           style={Styles.menuButton}
           onPress={this.gotoMainPage.bind(this)}>
           <Text style={Styles.menuText}>Main</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
-        <TouchableHighlight
+        <TouchableOpacity
           style={Styles.menuButton}
           onPress={this.gotoContactPage.bind(this)}>
           <Text style={Styles.menuText}>Contacts</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
-        <TouchableHighlight
+        <TouchableOpacity
           style={Styles.menuButton}
           onPress={this.gotoLeadPage.bind(this)}>
           <Text style={Styles.menuText}>Leads</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
-        <TouchableHighlight
+        <TouchableOpacity
           style={Styles.menuButton}
           onPress={this.gotoOppPage.bind(this)}>
           <Text style={Styles.menuText}>Opportunities</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
-        <TouchableHighlight
+        <TouchableOpacity
           style={Styles.menuButton}
           onPress={this.logout.bind(this)}>
           <Text style={Styles.menuText}>Logout</Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
 
       </View>
     );

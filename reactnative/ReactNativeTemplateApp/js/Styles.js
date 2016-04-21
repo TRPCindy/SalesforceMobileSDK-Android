@@ -197,6 +197,34 @@ var Styles = StyleSheet.create({
         marginTop: 8,
         marginLeft: 8,
         flex: 1
+    },
+    noteTitle: {
+        fontSize: 16,
+        color: '#404040',
+        fontFamily: 'sans-serif',
+    },
+    noteInputBlack: {
+        height: 40,
+        color:'black',
+    },
+    noteInputBlue: {
+        height: 40,
+        color:'#42638E',
+    },
+    noteButton: {
+        height: 36,
+        flex: 1,
+        flexDirection: 'row',
+        backgroundColor: '#cc0000',
+        borderColor: '#cc0000',
+        borderWidth: 1,
+        borderRadius: 4,
+        marginBottom: 10,
+        alignSelf: 'stretch',
+        justifyContent: 'center'
+    },
+    paddingFour: {
+        padding: 4
     }
 });
 

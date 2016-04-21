@@ -172,7 +172,7 @@ var TaskList = React.createClass({
         var that = this;
         return (
           <View>
-              <TouchableHighlight
+              <TouchableOpacity
                 style={Styles.row}
                 onPress={() => {
                   that.props.navigator.push({
@@ -186,7 +186,7 @@ var TaskList = React.createClass({
                    {rowData['type']}: {rowData['count']}
                   </Text>
                 </ScrollView>
-              </TouchableHighlight>
+              </TouchableOpacity>
               <View style={Styles.cellBorder} />
           </View>
         );

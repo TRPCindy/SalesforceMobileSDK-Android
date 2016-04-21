@@ -26,7 +26,7 @@ var TaskList = React.createClass({
         loaded: false
       };
     },
-    
+
     componentWillMount: function() {
       var that = this;
       var soql = 'SELECT Id,Subject FROM Task WHERE OwnerId = \''
@@ -79,7 +79,7 @@ var TaskList = React.createClass({
         var that = this;
         return (
           <View>
-              <TouchableHighlight
+              <TouchableOpacity
                 style={Styles.row}
                 onPress={() => {
                   that.props.navigator.push({
@@ -93,7 +93,7 @@ var TaskList = React.createClass({
                    {rowData['Subject']}
                   </Text>
                 </ScrollView>
-              </TouchableHighlight>
+              </TouchableOpacity>
               <View style={Styles.cellBorder} />
           </View>
         );

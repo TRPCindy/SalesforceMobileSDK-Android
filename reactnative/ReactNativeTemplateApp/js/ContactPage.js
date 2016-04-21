@@ -72,7 +72,7 @@ var ContactList = React.createClass({
     renderRow: function(rowData: Object) {
       return (
         <View>
-            <TouchableHighlight
+            <TouchableOpacity
               style={Styles.row}
               onPress={() => {
                 this.props.navigator.push({
@@ -87,7 +87,7 @@ var ContactList = React.createClass({
                 </Text>
                 <Icon name='keyboard-arrow-right' size={25} />
               </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
             <View style={Styles.cellBorder} />
         </View>
       );

@@ -31,15 +31,15 @@ var Note = React.createClass({
     postNote: function() {
       var that = this;
       dismissKeyboard();
-      forceClient.create('Note', 
-        { ParentId: that.props.relatedId, Title: that.state.title, Body: that.state.body }, 
+      forceClient.create('Note',
+        { ParentId: that.props.relatedId, Title: that.state.title, Body: that.state.body },
         function(resp) {
           console.log(resp);
           that.props.navigator.push({
-            id: 'NotePage', 
-            name: 'Notes', 
+            id: 'NotePage',
+            name: 'Notes',
             passProps: { relatedId: that.props.relatedId }});
-        }, 
+        },
         function(resp) {}
       );
     },
@@ -48,26 +48,36 @@ var Note = React.createClass({
       var that = this;
       return (
         <View style={Styles.scene}>
-          <Text >Title</Text>
-          <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'black'}}
-            ref="title"
-            autoFocus={true}
-            onChangeText={(text) => this.setState({title: text})}
-            value={this.state.title}
-            onEndEditing={(text) => {that.refs.body.focus()}}
-          />
-          <Text >Body</Text>
-          <TextInput
-            style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'black'}}
-            ref="body"
-            onChangeText={(text) => this.setState({body: text})}
-            value={this.state.body}
-          />
-          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}} 
-            onPress={that.postNote}>
-            <Text>Submit</Text>
-          </TouchableOpacity>
+          <View style={Styles.paddingFour}>
+              <Text style={Styles.noteTitle}>Title</Text>
+          </View>
+          <View style={{paddingHorizontal: 4}}>
+            <TextInput
+              style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'black'}}
+              ref="title"
+              autoFocus={true}
+              onChangeText={(text) => this.setState({title: text})}
+              value={this.state.title}
+              onEndEditing={(text) => {that.refs.body.focus()}}
+            />
+          </View>
+          <View style={Styles.paddingFour}>
+              <Text style={Styles.noteTitle}>Body</Text>
+          </View>
+          <View style={{paddingHorizontal: 4}}>
+            <TextInput
+              style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'black'}}
+              ref="body"
+              onChangeText={(text) => this.setState({body: text})}
+              value={this.state.body}
+            />
+          </View>
+          <View style={Styles.paddingFour}>
+              <TouchableHighlight style={Styles.noteButton}
+                onPress={that.postNote}>
+                <Text style={{fontSize: 18, color: 'white', alignSelf: 'center'}}>Update</Text>
+              </TouchableHighlight>
+          </View>
         </View>
       );
     }

@@ -74,13 +74,15 @@ var OppInfo = React.createClass({
                 dataSource={this.state.dataSource}
                 renderRow={this.renderRow} />
               <View>
-                  <TouchableOpacity style={Styles.row} 
+                  <TouchableOpacity style={Styles.row}
                     onPress={() => {
-                      this.props.navigator.push({ id: 'NotePage', 
-                        name: 'Notes', 
+                      this.props.navigator.push({ id: 'NotePage',
+                        name: 'Notes',
                         passProps: { relatedId: this.props.oppId }})
                     }}>
-                    <Text >Notes</Text>
+                    <Icon name='note' size={25} style={Styles.listViewIcon}/>
+                    <Text style={Styles.textStyle}>Notes</Text>
+                    <Icon name='mode-edit' size={25}/>
                   </TouchableOpacity>
                   <View style={Styles.cellBorder} />
               </View>
