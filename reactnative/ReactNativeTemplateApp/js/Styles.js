@@ -35,13 +35,13 @@ var Styles = StyleSheet.create({
         color: '#545454',
         flex: 1,
         flexDirection: 'row',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'sans-serif'
     },
     textStyleRight: {
         color: '#545454',
         flex: 1,
         flexDirection: 'row',
-        fontFamily: 'sans-serif-thin',
+        fontFamily: 'sans-serif',
         //justifyContent: 'flex-end'
     },
     navBar: {
@@ -140,7 +140,7 @@ var Styles = StyleSheet.create({
         marginTop: 50,
         marginLeft: 50,
         color: 'white',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'sans-serif'
     },
     menuButton: {
         height: 50,
@@ -153,7 +153,7 @@ var Styles = StyleSheet.create({
         fontSize: 16,
         marginLeft: 40,
         color: '#545454',
-        fontFamily: 'sans-serif-thin'
+        fontFamily: 'sans-serif'
     },
     chartContainer: {
         flex: 1,

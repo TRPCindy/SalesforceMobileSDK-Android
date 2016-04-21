@@ -170,8 +170,6 @@ var App = React.createClass({
                     onPress={() => {
                       closeDrawer()
                     }}>
-                    <Icon name='list' size={30}
-                      style={Styles.iconLeft}/>
                   </TouchableOpacity>
               </View>
               <Icon.Button name="account-box" style={Styles.menuButton} color='#545454'
@@ -212,7 +210,7 @@ var App = React.createClass({
                   if (route.sceneConfig) {
                     return route.sceneConfig;
                   }
-                  return Navigator.SceneConfigs.HorizontalSwipeJump;
+                  return Navigator.SceneConfigs.FloatFromRight;
                 }}
                 navigationBar={
                     <Navigator.NavigationBar
