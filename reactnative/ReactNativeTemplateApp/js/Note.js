@@ -60,35 +60,34 @@ var NoteInfo = React.createClass({
       var that = this;
       that.makeEditable(false);
       forceClient.update('Note', that.props.noteId,
-        { Title: that.state.title, Body: that.state.body }, 
+        { Title: that.state.title, Body: that.state.body },
         function(resp) {
-          console.log(resp);
           that.props.navigator.push({
             id: 'NotePage', 
             name: 'Notes', 
             passProps: { relatedId: that.props.relatedId }});
-        }, 
+        },
         function(resp) {}
       );
     },
 
     deleteNote: function() {
       var that = this;
-      forceClient.del('Note', that.props.noteId, 
+      forceClient.del('Note', that.props.noteId,
         function(resp) {
           console.log(resp);
           that.props.navigator.push({
-            id: 'NotePage', 
-            name: 'Notes', 
+            id: 'NotePage',
+            name: 'Notes',
             passProps: { relatedId: that.props.relatedId }});
-        }, 
+        },
         function(resp) {}
       );
     },
 
     makeEditable(value) {
-      this.refs['textInput1'].setNativeProps({editable: value});
-      this.refs['textInput2'].setNativeProps({editable: value});
+      //this.refs['textInput1'].setNativeProps({editable: value});
+      //this.refs['textInput2'].setNativeProps({editable: value});
       this.setState({editable: value});
     },
 
@@ -104,47 +103,96 @@ var NoteInfo = React.createClass({
             </View>
           );
         }
-        return (
-          <View style={Styles.scene}>
-            <ScrollView>
-                <TouchableOpacity
-                  onPress={() => {
-                    that.makeEditable(true),
-                    that.refs.textInput1.focus()
-                  }}>
-                  <Icon name='mode-edit' size={25} />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={that.deleteNote}>
-                  <Icon name='delete' size={25} />
-                </TouchableOpacity>
-                <Text >Title</Text>
-                <TextInput
-                  style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'black'}}
-                  ref={'textInput1'}
-                  editable={false}
-                  defaultValue={that.state.title}
-                  onChangeText={(text) => that.setState({title: text})}
-                  value={that.state.title}
-                />
-                <View style={Styles.cellBorder} />
-                <Text >Body</Text>
-                <TextInput
-                  style={{height: 40, borderColor: 'gray', borderWidth: 1, color:'black'}}
-                  ref={'textInput2'}
-                  editable={false}
-                  defaultValue={that.state.title}
-                  onChangeText={(text) => that.setState({body: text})}
-                  value={that.state.body}
-                />
-                <View style={Styles.cellBorder} />
-                <TouchableHighlight style={{flex: 1, justifyContent: 'center'}} 
-                  onPress={that.updateNote}>
-                  <Text>Update</Text>
-                </TouchableHighlight>
-            </ScrollView>
-          </View>
-      );
+        if (that.state.editable) {
+            return (
+              <View style={Styles.scene}>
+                <ScrollView>
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                        <TouchableOpacity
+                          style={{flex: 1}}
+                          onPress={() => {
+                            that.makeEditable(false)
+                          }}>
+                          <Icon name='mode-edit' size={25} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={that.deleteNote}>
+                          <Icon name='delete' size={25} />
+                        </TouchableOpacity>
+                    </View>
+                    <Text >Title</Text>
+                    <TextInput
+                      style={{height: 40, borderWidth: 0, color:'blue'}}
+                      ref={'textInput1'}
+                      editable={true}
+                      defaultValue={that.state.title}
+                      onChangeText={(text) => that.setState({title: text})}
+                      value={that.state.title}
+                    />
+                    <View style={Styles.cellBorder} />
+                    <Text>Body</Text>
+                    <TextInput
+                      style={{height: 40, borderWidth: 0, color:'blue'}}
+                      ref={'textInput2'}
+                      editable={true}
+                      defaultValue={that.state.body}
+                      onChangeText={(text) => that.setState({body: text})}
+                      value={that.state.body}
+                    />
+                    <View style={Styles.cellBorder} />
+                    <TouchableHighlight style={{flex: 1, justifyContent: 'center'}}
+                      onPress={that.updateNote}>
+                      <Text>Update</Text>
+                    </TouchableHighlight>
+                </ScrollView>
+              </View>
+          );
+      } else {
+          return (
+            <View style={Styles.scene}>
+              <ScrollView>
+                  <View style={{flex: 1, flexDirection: 'row'}}>
+                      <TouchableOpacity
+                        style={{flex: 1}}
+                        onPress={() => {
+                          that.makeEditable(true),
+                          that.refs.textInput1.focus()
+                        }}>
+                        <Icon name='mode-edit' size={25} />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={that.deleteNote}>
+                        <Icon name='delete' size={25} />
+                      </TouchableOpacity>
+                  </View>
+                  <Text >Title</Text>
+                  <TextInput
+                    style={{height: 40, color:'black'}}
+                    ref={'textInput1'}
+                    editable={false}
+                    defaultValue={that.state.title}
+                    onChangeText={(text) => that.setState({title: text})}
+                    value={that.state.title}
+                  />
+                  <View style={Styles.cellBorder} />
+                  <Text>Body</Text>
+                  <TextInput
+                    style={{height: 40, color:'black'}}
+                    ref={'textInput2'}
+                    editable={false}
+                    defaultValue={that.state.body}
+                    onChangeText={(text) => that.setState({body: text})}
+                    value={that.state.body}
+                  />
+                  <View style={Styles.cellBorder} />
+                  <TouchableHighlight style={{flex: 1, justifyContent: 'center'}}
+                    onPress={that.updateNote}>
+                    <Text>Update</Text>
+                  </TouchableHighlight>
+              </ScrollView>
+            </View>
+        );
+      }
     }
 });
 
