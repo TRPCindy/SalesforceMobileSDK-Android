@@ -83,9 +83,11 @@ var TaskInfo = React.createClass({
               <View>
                   <View style={Styles.row}>
                     <Icon name='subject' size={25} style={Styles.listViewIcon}/>
-                    <Text numberOfLines={1} style={Styles.textStyle}>
-                     {rowData.substring(9)}
-                    </Text>
+                    <ScrollView horizontal={true} contentContainerStyle={Styles.rowNoPad}>
+                      <Text numberOfLines={1} style={Styles.textStyle} >
+                        {rowData['Subject']}
+                      </Text>
+                    </ScrollView>
                   </View>
                   <View style={Styles.cellBorder} />
               </View>
@@ -95,9 +97,11 @@ var TaskInfo = React.createClass({
               <View>
                   <View style={Styles.row}>
                     <Icon name='date-range' size={25} style={Styles.listViewIcon}/>
-                    <Text numberOfLines={1} style={Styles.textStyle}>
-                     {rowData.substring(14)}
-                    </Text>
+                    <ScrollView horizontal={true} contentContainerStyle={Styles.rowNoPad}>
+                      <Text numberOfLines={1} style={Styles.textStyle}>
+                       {rowData.substring(14)}
+                      </Text>
+                    </ScrollView>
                   </View>
                   <View style={Styles.cellBorder} />
               </View>
@@ -107,9 +111,11 @@ var TaskInfo = React.createClass({
               <View>
                   <View style={Styles.row}>
                     <Icon name='priority-high' size={25} style={Styles.listViewIcon}/>
-                    <Text numberOfLines={1} style={Styles.textStyle}>
-                     {rowData.substring(10)}
-                    </Text>
+                    <ScrollView horizontal={true} contentContainerStyle={Styles.rowNoPad}>
+                      <Text numberOfLines={1} style={Styles.textStyle}>
+                       {rowData.substring(10)}
+                      </Text>
+                    </ScrollView>
                   </View>
                   <View style={Styles.cellBorder} />
               </View>
@@ -119,9 +125,11 @@ var TaskInfo = React.createClass({
               <View>
                   <View style={Styles.row}>
                     <Icon name='description' size={25} style={Styles.listViewIcon}/>
-                    <Text numberOfLines={1} style={Styles.textStyle}>
-                     {rowData.substring(13)}
-                    </Text>
+                    <ScrollView horizontal={true} contentContainerStyle={Styles.rowNoPad}>
+                      <Text numberOfLines={1} style={Styles.textStyle}>
+                       {rowData.substring(13)}
+                      </Text>
+                    </ScrollView>
                   </View>
                   <View style={Styles.cellBorder} />
               </View>
@@ -130,9 +138,11 @@ var TaskInfo = React.createClass({
             return (
               <View>
                   <View style={Styles.row}>
-                    <Text numberOfLines={1} style={Styles.textStyle}>
+                    <ScrollView horizontal={true} contentContainerStyle={Styles.rowNoPad}>
+                      <Text numberOfLines={1} style={Styles.textStyle}>
                         {rowData}
-                    </Text>
+                      </Text>
+                    </ScrollView>
                   </View>
                   <View style={Styles.cellBorder} />
               </View>

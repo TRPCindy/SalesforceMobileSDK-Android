@@ -382,11 +382,11 @@ var NavigationBarRouteMapper = {
         || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
         if (route.name.length > 38) {
           return (
-            <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
+            <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
               <Text style={Styles.navBarTitleLarge}>
                 {route.name}
               </Text>
-            </TouchableOpacity>
+            </View>
           );
         }
         return (

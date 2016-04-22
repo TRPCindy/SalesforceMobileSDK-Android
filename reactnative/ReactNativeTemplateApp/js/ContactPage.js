@@ -60,6 +60,11 @@ var ContactList = React.createClass({
         }
         return (
           <View style={Styles.scene}>
+            <View style={Styles.rowColor}>
+              <Text numberOfLines={1} style={{color:'white', fontWeight: '300', fontSize: 16}}>
+                Contacts
+              </Text>
+            </View>
             <ScrollView>
               <ListView
                 dataSource={this.state.dataSource}

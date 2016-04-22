@@ -114,11 +114,8 @@ var Styles = StyleSheet.create({
         paddingLeft: 26
     },
     rowColor: {
-        flex: 1,
-        alignItems: 'center',
         backgroundColor: '#cc0000',
-        flexDirection: 'row',
-        padding: 14,
+        padding: 12,
         elevation: 1
     },
     cellBorder: {
