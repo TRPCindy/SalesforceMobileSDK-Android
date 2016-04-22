@@ -60,13 +60,6 @@ var NoteList = React.createClass({
         return (
           <View style={Styles.scene}>
             <ScrollView>
-              <TouchableOpacity style={{flex: 1, justifyContent: 'center'}} 
-                onPress={() => {
-                  this.props.navigator.push({ id: 'CreateNote', name: 'New Note', 
-                    passProps: { relatedId: this.props.relatedId }})
-                }}>
-                <Text>Create New</Text>
-              </TouchableOpacity>
               <ListView
                 dataSource={this.state.dataSource}
                 renderRow={this.renderRow} />

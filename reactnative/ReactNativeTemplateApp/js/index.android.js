@@ -326,14 +326,40 @@ var NavigationBarRouteMapper = {
       if (profileUrl === '' || route !== undefined && (route.id === 'Contact'
         || route.id === 'Lead' || route.id === 'Opportunity'
         || route.id === 'Task' || route.id === 'TaskPage'
-        || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
+        || route.id === 'Note' || route.id === 'CreateNote')) {
 
-        return null;
-    } else if (route !== undefined && route.id === 'MetricsPage') {
+        return (null
+        );
+      } else if (route !== undefined && route.id === 'NotePage') {
+        var routes = navigator.getCurrentRoutes();
+        var curRoute = routes[routes.length-1];
+        return (
+          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}} 
+            onPress={() => {
+              navigator.push({ id: 'CreateNote', name: 'New Note', 
+                passProps: { relatedId: curRoute.passProps.relatedId }})
+            }}>
+            <Icon name='note-add' size={30}
+              style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }} />
+          </TouchableOpacity>
+        );
+      } else if (route !== undefined && route.id === 'MetricsPage') {
+          return(
+            <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
+              onPress={() => {
+                navigator.pop();
+              }}>
+              <Image
+                style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }}
+                source={{ uri: profileUrl }}
+              />
+            </TouchableOpacity>
+          );
+      } else {
         return(
           <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
             onPress={() => {
-              navigator.pop();
+              navigator.push({ id: 'MetricsPage', name: 'Agent Metrics' });
             }}>
             <Image
               style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }}
@@ -341,19 +367,7 @@ var NavigationBarRouteMapper = {
             />
           </TouchableOpacity>
         );
-    } else {
-      return(
-        <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
-          onPress={() => {
-            navigator.push({ id: 'MetricsPage', name: 'Agent Metrics' });
-          }}>
-          <Image
-            style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }}
-            source={{ uri: profileUrl }}
-          />
-        </TouchableOpacity>
-      );
-    }
+      }
   },
 
   Title: function(route, navigator, index, navState) {
@@ -398,7 +412,7 @@ var NavigationBarRouteMapper = {
           />
         </TouchableOpacity>
       );
-  },
+  }
 };
 
 
