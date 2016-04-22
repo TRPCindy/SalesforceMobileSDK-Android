@@ -328,7 +328,13 @@ var NavigationBarRouteMapper = {
         || route.id === 'Task' || route.id === 'TaskPage'
         || route.id === 'Note' || route.id === 'CreateNote')) {
 
-        return (null
+        return (
+          <View style={{flex: 1, justifyContent: 'center'}} >
+            <Image
+              style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }}
+              source={require('../res/White_square.png')}
+            />
+          </View>
         );
       } else if (route !== undefined && route.id === 'NotePage') {
         var routes = navigator.getCurrentRoutes();
@@ -376,7 +382,7 @@ var NavigationBarRouteMapper = {
         || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
         if (route.name.length > 38) {
           return (
-            <TouchableOpacity style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+            <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}>
               <Text style={Styles.navBarTitleLarge}>
                 {route.name}
               </Text>
@@ -384,11 +390,11 @@ var NavigationBarRouteMapper = {
           );
         }
         return (
-          <TouchableOpacity style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
             <Text style={Styles.navBarTitle}>
               {route.name}
             </Text>
-          </TouchableOpacity>
+          </View>
         );
       }
       if (route !== undefined && route.id === 'MainPage') {

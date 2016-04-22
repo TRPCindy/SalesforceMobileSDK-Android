@@ -75,7 +75,7 @@ var Note = React.createClass({
           <View style={Styles.paddingFour}>
               <TouchableHighlight style={Styles.noteButton}
                 onPress={that.postNote}>
-                <Text style={{fontSize: 18, color: 'white', alignSelf: 'center'}}>Update</Text>
+                <Text style={{fontSize: 18, color: 'white', alignSelf: 'center'}}>Create</Text>
               </TouchableHighlight>
           </View>
         </View>
