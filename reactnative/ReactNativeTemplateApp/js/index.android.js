@@ -261,7 +261,7 @@ var NavigationBarRouteMapper = {
   LeftButton: function(route, navigator, index, navState) {
     if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead'
       || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage'
-      || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
+      || route.id === 'Note' || route.id === 'CreateNote')) {
       
       return (
         <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
@@ -299,19 +299,6 @@ var NavigationBarRouteMapper = {
             />
           </View>
         );
-      } else if (route !== undefined && route.id === 'NotePage') {
-        var routes = navigator.getCurrentRoutes();
-        var curRoute = routes[routes.length-1];
-        return (
-          <TouchableOpacity style={{flex: 1, justifyContent: 'center'}} 
-            onPress={() => {
-              navigator.push({ id: 'CreateNote', name: 'New Note', 
-                passProps: { relatedId: curRoute.passProps.relatedId }})
-            }}>
-            <Icon name='note-add' size={30}
-              style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }} />
-          </TouchableOpacity>
-        );
       } else if (route !== undefined && route.id === 'MetricsPage') {
           return(
             <TouchableOpacity style={{flex: 1, justifyContent: 'center'}}
@@ -344,7 +331,7 @@ var NavigationBarRouteMapper = {
   Title: function(route, navigator, index, navState) {
       if (route !== undefined && (route.id === 'Contact' || route.id === 'Lead'
         || route.id === 'Opportunity' || route.id === 'Task' || route.id === 'TaskPage'
-        || route.id === 'NotePage' || route.id === 'Note' || route.id === 'CreateNote')) {
+        || route.id === 'Note' || route.id === 'CreateNote')) {
         if (route.name.length > 38) {
           return (
             <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>

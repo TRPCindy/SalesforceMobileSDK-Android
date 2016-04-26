@@ -28,7 +28,7 @@ var LeadInfo = React.createClass({
       };
   },
 
-  componentDidMount: function() {
+  componentWillMount: function() {
       var that = this;
       var soql = 'SELECT Name,Email,Phone,Status,LeadSource FROM Lead WHERE Id = \''
         +that.props.leadId+'\'';
