@@ -80,11 +80,9 @@ var ContactInfo = React.createClass({
                         name: 'Notes',
                         passProps: { relatedId: this.props.contactId }})
                     }}>
-                    <View style={Styles.flowRight}>
-                      <Icon name='note' size={25} style={Styles.listViewIcon}/>
-                      <Text style={Styles.textStyle}>Notes</Text>
-                      <Icon name='add' size={25}/>
-                    </View>
+                    <Icon name='note' size={25} style={Styles.listViewIcon}/>
+                    <Text style={Styles.textStyle}>Notes</Text>
+                    <Icon name='mode-edit' size={25}/>
                   </TouchableOpacity>
                   <View style={Styles.cellBorder} />
               </View>

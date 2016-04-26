@@ -198,7 +198,7 @@ var LeadInfo = React.createClass({
       return (
         <View>
             <TouchableOpacity
-              style={Styles.row}
+              style={Styles.subrow}
               onPress={() => {
                 this.props.navigator.push({
                   id: 'Note',
@@ -206,8 +206,9 @@ var LeadInfo = React.createClass({
                   passProps: {noteId: rowData['Id'], relatedId: this.props.relatedId}
                 })
               }}>
-              <View style={Styles.flowRightPadLeft}>
-                <Text numberOfLines={1} style={Styles.textStyleIndent} >
+              <View style={Styles.rowLeftPad}>
+                <Icon name='label-outline' size={25} style={{paddingRight: 8}}/>
+                <Text numberOfLines={1} style={Styles.textStyle} >
                  {rowData['Title']}
                 </Text>
                 <Icon name='keyboard-arrow-right' size={25} />

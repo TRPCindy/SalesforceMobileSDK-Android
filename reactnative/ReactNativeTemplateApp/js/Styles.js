@@ -95,6 +95,13 @@ var Styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 12,
     },
+    subrow: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        padding: 5,
+    },
     rowNoPad: {
         flex: 1,
         alignItems: 'center',
@@ -197,7 +204,7 @@ var Styles = StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'space-between',
         flex: 1,
-        paddingLeft: 12,
+        paddingLeft: 60,
     },
     flowTop: {
         flexDirection: 'row',
