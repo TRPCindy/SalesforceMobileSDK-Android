@@ -37,8 +37,6 @@ var Note = require('./Note');
 var CreateNote = require('./CreateNote');
 var MetricsPage = require('./MetricsPage');
 
-var profileUrl = '';
-
 var App = React.createClass({
 
     getInitialState: function() {
@@ -48,7 +46,7 @@ var App = React.createClass({
         };
     },
 
-    componentDidMount: function() {
+    componentWillMount: function() {
         var that = this;
         oauth.authenticate(
             function() {
@@ -57,19 +55,27 @@ var App = React.createClass({
                   function (resp){
                     //var accessToken = resp.accessToken;
                     that.setState({userId: resp['userId']});
-                    var soql = 'SELECT Name,SmallPhotoUrl,FullPhotoUrl FROM User WHERE Id = \''
+                    var soql = 'SELECT Name,FullPhotoUrl FROM User WHERE Id = \''
                       +that.state.userId+'\' limit 1';
                     forceClient.query(soql,
                       function(response) {
                           var user = response.records[0];
-                          profileUrl = user['SmallPhotoUrl'];
                           that.setState({
                             userName: user['Name'],
-                            profileUrl: user['SmallPhotoUrl'],
                             fullProfileUrl: user['FullPhotoUrl']
                           });
                       }
                     );
+
+                    BackAndroid.addEventListener('hardwareBackPress', function() {
+                      var routes = navigator.getCurrentRoutes();
+                      if (routes.length < 2) {
+                        BackAndroid.exitApp();
+                      } else {
+                        navigator.pop();
+                      }
+                      return true;
+                    });
                   },
                   function (resp) {}
                 );
@@ -78,16 +84,6 @@ var App = React.createClass({
                 console.log('Failed to authenticate:' + error);
             }
         );
-
-        BackAndroid.addEventListener('hardwareBackPress', function() {
-          var routes = navigator.getCurrentRoutes();
-          if (routes.length < 2) {
-            BackAndroid.exitApp();
-          } else {
-            navigator.pop();
-          }
-          return true;
-        });
     },
 
     renderScene: function(route, navigator) {
@@ -290,7 +286,7 @@ var NavigationBarRouteMapper = {
 
   RightButton: function(route, navigator, index, navState) {
       var that = this;
-      if (profileUrl === '' || route !== undefined && (route.id === 'Contact'
+      if (route !== undefined && (route.id === 'Contact'
         || route.id === 'Lead' || route.id === 'Opportunity'
         || route.id === 'Task' || route.id === 'TaskPage'
         || route.id === 'Note' || route.id === 'CreateNote')) {
@@ -322,9 +318,10 @@ var NavigationBarRouteMapper = {
               onPress={() => {
                 navigator.pop();
               }}>
-              <Image
-                style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }}
-                source={{ uri: profileUrl }}
+              <Icon
+                name='account-box' size={30}
+                style={{marginRight: 8, marginBottom: 5 }}
+                color='#17314A'
               />
             </TouchableOpacity>
           );
@@ -334,9 +331,10 @@ var NavigationBarRouteMapper = {
             onPress={() => {
               navigator.push({ id: 'MetricsPage', name: 'Agent Metrics' });
             }}>
-            <Image
-              style={{ height:30, width: 30, marginRight: 8, marginBottom: 5 }}
-              source={{ uri: profileUrl }}
+            <Icon
+              name='account-box' size={30}
+              style={{marginRight: 8, marginBottom: 5 }}
+              color='#17314A'
             />
           </TouchableOpacity>
         );

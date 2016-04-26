@@ -67,7 +67,8 @@ var LeadList = React.createClass({
             <ScrollView>
               <ListView
                 dataSource={this.state.dataSource}
-                renderRow={this.renderRow} />
+                renderRow={this.renderRow} 
+                initialListSize={10} />
             </ScrollView>
           </View>
       );
