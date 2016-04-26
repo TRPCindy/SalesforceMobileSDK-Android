@@ -40,6 +40,7 @@ public class ReactNativeTemplateApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+
 		SalesforceReactSDKManager.initReactNative(getApplicationContext(), new ReactNativeKeyImpl(), MainActivity.class);
 	}
 }

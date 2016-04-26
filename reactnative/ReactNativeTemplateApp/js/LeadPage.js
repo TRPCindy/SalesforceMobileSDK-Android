@@ -28,7 +28,7 @@ var LeadList = React.createClass({
       };
     },
 
-    componentWillMount: function() {
+    componentDidMount: function() {
       var that = this;
       var soql = 'SELECT Id, Name FROM Lead WHERE Owner.Id = \''
         +that.props.userId+'\'';

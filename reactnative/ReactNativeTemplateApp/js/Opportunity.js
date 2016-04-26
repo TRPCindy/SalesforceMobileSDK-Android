@@ -149,7 +149,7 @@ var OppInfo = React.createClass({
                 <View style={Styles.row}>
                   <Image
                     style={Styles.listViewImageIcon}
-                    source={require('../res/probability.png')}
+                    source={require('./probability.png')}
                   />
                   <Text numberOfLines={1} style={Styles.textStyle}>
                    {rowData.substring(13)}%

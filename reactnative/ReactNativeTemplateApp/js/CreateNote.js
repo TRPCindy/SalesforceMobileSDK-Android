@@ -35,10 +35,7 @@ var Note = React.createClass({
         { ParentId: that.props.relatedId, Title: that.state.title, Body: that.state.body },
         function(resp) {
           console.log(resp);
-          that.props.navigator.push({
-            id: 'NotePage',
-            name: 'Notes',
-            passProps: { relatedId: that.props.relatedId }});
+          that.props.navigator.pop();
         },
         function(resp) {}
       );

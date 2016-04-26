@@ -62,10 +62,7 @@ var NoteInfo = React.createClass({
       forceClient.update('Note', that.props.noteId,
         { Title: that.state.title, Body: that.state.body },
         function(resp) {
-          that.props.navigator.push({
-            id: 'NotePage',
-            name: 'Notes',
-            passProps: { relatedId: that.props.relatedId }});
+          that.props.navigator.pop();
         },
         function(resp) {}
       );
@@ -76,10 +73,7 @@ var NoteInfo = React.createClass({
       forceClient.del('Note', that.props.noteId,
         function(resp) {
           console.log(resp);
-          that.props.navigator.push({
-            id: 'NotePage',
-            name: 'Notes',
-            passProps: { relatedId: that.props.relatedId }});
+          that.props.navigator.pop();
         },
         function(resp) {}
       );

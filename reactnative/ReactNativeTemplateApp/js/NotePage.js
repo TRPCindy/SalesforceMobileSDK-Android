@@ -22,16 +22,28 @@ var NoteList = React.createClass({
 
     componentWillMount: function() {
       var that = this;
-      var soql = 'SELECT Id,Title,Body FROM Note WHERE ParentId = \''
-        +that.props.relatedId+'\'';
-      forceClient.query(soql,
-        function(response) {
-            that.setState({
-                dataSource: that.getDataSource(response.records),
-                loaded: true
-            });
+      var callback = (event) => {
+        var soql = 'SELECT Id,Title,Body FROM Note WHERE ParentId = \''
+          +that.props.relatedId+'\'';
+        forceClient.query(soql,
+          function(response) {
+              that.setState({
+                  dataSource: that.getDataSource(response.records),
+                  loaded: true
+              });
 
-        });
+          });
+      };
+      callback();
+
+      // Observe focus change events from this component.
+      this._listeners = [
+        navigator.navigationContext.addListener('willfocus', callback)
+      ];
+    },
+
+    componentWillUnmount: function() {
+      this._listeners && this._listeners.forEach(listener => listener.remove());
     },
 
     getInitialState: function() {
