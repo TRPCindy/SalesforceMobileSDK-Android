@@ -37,6 +37,13 @@ var Styles = StyleSheet.create({
         flexDirection: 'row',
         fontFamily: 'sans-serif'
     },
+    textStyleIndent: {
+        color: '#545454',
+        flex: 1,
+        flexDirection: 'row',
+        paddingHorizontal: 12,
+        fontFamily: 'sans-serif'
+    },
     textStyleRight: {
         color: '#545454',
         flex: 1,
@@ -88,6 +95,13 @@ var Styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 12,
     },
+    subrow: {
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: 'white',
+        flexDirection: 'row',
+        padding: 5,
+    },
     rowNoPad: {
         flex: 1,
         alignItems: 'center',
@@ -117,6 +131,15 @@ var Styles = StyleSheet.create({
         backgroundColor: '#cc0000',
         padding: 12,
         elevation: 1
+    },
+    rowColorRight: {
+        backgroundColor: '#cc0000',
+        padding: 12,
+        elevation: 1,
+        flexDirection: 'row',
+        alignSelf: 'stretch',
+        justifyContent: 'space-between',
+        flex: 1
     },
     cellBorder: {
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
@@ -175,6 +198,13 @@ var Styles = StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'space-between',
         flex: 1
+    },
+    flowRightPadLeft: {
+        flexDirection: 'row',
+        alignSelf: 'stretch',
+        justifyContent: 'space-between',
+        flex: 1,
+        paddingLeft: 60,
     },
     flowTop: {
         flexDirection: 'row',

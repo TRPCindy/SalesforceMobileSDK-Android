@@ -94,8 +94,9 @@ var LeadInfo = React.createClass({
             <ListView
               dataSource={this.state.dataSource}
               renderRow={this.renderRow} />
-            <View style={Styles.rowColor}>
-              <Text numberOfLines={1} style={{color:'white', fontWeight: '300', fontSize: 16}}>
+            <View style={Styles.row}>
+              <Icon name='note' size={25} style={Styles.listViewIcon}/>
+              <Text numberOfLines={1} style={Styles.textStyle}>
                 Notes
               </Text>
               <TouchableOpacity
@@ -103,9 +104,10 @@ var LeadInfo = React.createClass({
                   navigator.push({ id: 'CreateNote', name: 'New Note', 
                     passProps: { relatedId: this.props.leadId }})
                 }}>
-                <Icon name='note-add' size={30} style={{alignItems: 'flex-end'}}/>
+                <Icon name='add' size={30} style={{alignItems: 'flex-end', color: '#BCBCBC'}}/>
               </TouchableOpacity>
             </View>
+            <View style={Styles.cellBorder} />
             <ScrollView>
               <ListView
                 dataSource={this.state.dataSourceNotes}
@@ -196,7 +198,7 @@ var LeadInfo = React.createClass({
       return (
         <View>
             <TouchableOpacity
-              style={Styles.row}
+              style={Styles.subrow}
               onPress={() => {
                 this.props.navigator.push({
                   id: 'Note',
@@ -204,7 +206,8 @@ var LeadInfo = React.createClass({
                   passProps: {noteId: rowData['Id'], relatedId: this.props.relatedId}
                 })
               }}>
-              <View style={Styles.flowRight}>
+              <View style={Styles.rowLeftPad}>
+                <Icon name='label-outline' size={25} style={{paddingRight: 8}}/>
                 <Text numberOfLines={1} style={Styles.textStyle} >
                  {rowData['Title']}
                 </Text>
